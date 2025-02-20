@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolyLoopApi", "PolyLoopApi\PolyLoopApi.csproj", "{20F1F47A-2842-44BE-944C-FCB9286A27FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{4E8E3227-73B3-4D7D-8BA9-A534A823B129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{B61B028D-1703-401E-8BC9-8FA0AF30F466}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{20F1F47A-2842-44BE-944C-FCB9286A27FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20F1F47A-2842-44BE-944C-FCB9286A27FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20F1F47A-2842-44BE-944C-FCB9286A27FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E8E3227-73B3-4D7D-8BA9-A534A823B129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E8E3227-73B3-4D7D-8BA9-A534A823B129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E8E3227-73B3-4D7D-8BA9-A534A823B129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E8E3227-73B3-4D7D-8BA9-A534A823B129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B61B028D-1703-401E-8BC9-8FA0AF30F466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B61B028D-1703-401E-8BC9-8FA0AF30F466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B61B028D-1703-401E-8BC9-8FA0AF30F466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B61B028D-1703-401E-8BC9-8FA0AF30F466}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
