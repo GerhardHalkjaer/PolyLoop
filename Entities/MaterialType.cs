@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string IconPath { get; set; }
-        public int PackagingWeight { get; set; }
+        
 
 
         public MaterialType()
@@ -19,7 +19,7 @@
             Id = InMatType.Id;
             Name = InMatType.Name;
             IconPath = InMatType.IconPath;
-            PackagingWeight = InMatType.PackagingWeight;
+        
         }
     }
 }

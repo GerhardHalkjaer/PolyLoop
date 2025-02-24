@@ -24,12 +24,18 @@ namespace DataAccess
 
             while (dataReader.Read())
             {
-                // TODO fill
+                MaterialType matType = new MaterialType();
+                matType.Id = (int)dataReader["Id"];
+                matType.Name = dataReader["Name"].ToString();
+                matType.IconPath = dataReader["IconPath"].ToString();
+
+                materialTypes.Add(matType);
+                
             }
 
             con.Close();
 
-            return null;
+            return materialTypes;
         }
 
 
@@ -38,7 +44,7 @@ namespace DataAccess
 
         }
 
-
+        // SELECT * FROM MaterialTypes INNER JOIN SpecificTypes ON MaterialTypes.Id = SpecificTypes.MaterialTypeId
 
     }
 }
