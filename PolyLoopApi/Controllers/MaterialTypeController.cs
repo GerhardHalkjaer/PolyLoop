@@ -9,12 +9,28 @@ namespace PolyLoopApi.Controllers
     [ApiController]
     public class MaterialTypeController : ControllerBase
     {
+        private readonly MaterialTypeRepo _materialTypeRepo;
+
+        public MaterialTypeController(MaterialTypeRepo matTypeRepo)
+        {
+            _materialTypeRepo = matTypeRepo;
+        }
+
+
         [HttpGet]
         public ActionResult<List<MaterialType>> GetAll()
         {
-            MaterialTypeRepo materialType = new MaterialTypeRepo();
-            List<MaterialType> result = materialType.GetAll();
+            List<MaterialType> result = _materialTypeRepo.GetAll();
             return result;
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<List<MaterialType>> GetById(int id)
+        {
+            List<MaterialType> result = _materialTypeRepo.GetById(id);//change
+            return result;
+        }
+
+
     }
 }

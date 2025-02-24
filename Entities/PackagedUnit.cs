@@ -9,21 +9,23 @@ namespace Entities
     public class PackagedUnit
     {
         public int Id { get; set; }
-        public int SpecificTypeId { get; set; }
-        public int PackagingId { get; set; }
+        public SpecificType SpecificType { get; set; } 
+        public Packaging Packaging { get; set; } //TODO change to object Packaging
         public int weight { get; set; }
         public string ImagePath { get; set; }
 
         public PackagedUnit()
         {
             ImagePath = string.Empty;   
+            SpecificType = new SpecificType();
+            Packaging = new Packaging();
         }
 
         public PackagedUnit(PackagedUnit InpackagedUnit)
         {
             Id = InpackagedUnit.Id;
-            SpecificTypeId = InpackagedUnit.SpecificTypeId;
-            PackagingId = InpackagedUnit.PackagingId;
+            SpecificType = InpackagedUnit.SpecificType;
+            Packaging = InpackagedUnit.Packaging;
             weight = InpackagedUnit.weight;
             ImagePath = InpackagedUnit.ImagePath;
         }

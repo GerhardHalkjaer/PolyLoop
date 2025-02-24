@@ -38,6 +38,18 @@ namespace DataAccess
             return materialTypes;
         }
 
+        public List<MaterialType> GetById(int id)
+        {
+            List<MaterialType> materialTypes = new List<MaterialType>();
+
+
+
+
+
+
+            return materialTypes;
+        }
+
 
         public void SaveNew(MaterialType material)
         {
