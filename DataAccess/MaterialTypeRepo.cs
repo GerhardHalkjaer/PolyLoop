@@ -6,10 +6,7 @@ namespace DataAccess
 {
     public class MaterialTypeRepo
     {
-        private const string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PolyLoop;
-                                    Integrated Security=True;Connect Timeout=30;Encrypt=False;
-                                    Trust Server Certificate=False;Application Intent=ReadWrite;
-                                    Multi Subnet Failover=False";
+        
 
 
         public List<MaterialType> GetAll()
@@ -17,7 +14,7 @@ namespace DataAccess
             List<MaterialType> materialTypes = new List<MaterialType>();
 
             string query = "SELECT * FROM MaterialTypes";
-            SqlConnection con = new SqlConnection(ConnectionString);
+            SqlConnection con = new SqlConnection(ConnectionString.ConString);
             SqlCommand cmd = new SqlCommand(query, con);
             con.Open();
             SqlDataReader dataReader = cmd.ExecuteReader();
