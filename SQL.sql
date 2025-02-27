@@ -59,19 +59,19 @@ ALTER TABLE PackagedUnits
 GO
 
 INSERT INTO Packagings ("Name",IconPath,PackagingWeight)
-VALUES ('Papkasse','Emballage/PapkasseIcon.jpg',5)
+VALUES ('Papkasse','Emballage/PapkasseIcon.jpg',35)
 
 INSERT INTO Packagings ("Name",IconPath,PackagingWeight)
-VALUES ('BigBag','Emballage/BigBagIcon.jpg',123)
+VALUES ('BigBag','Emballage/BigBagIcon.jpg',130)
 
 INSERT INTO Packagings ("Name",IconPath,PackagingWeight)
-VALUES ('Lille Palle','Emballage/LillePalleIcon.jpg',123)
+VALUES ('Lille Palle','Emballage/LillePalleIcon.jpg',25)
 
 INSERT INTO Packagings ("Name",IconPath,PackagingWeight)
-VALUES ('Stor Palle','Emballage/StorePalleIcon.jpg',123)
+VALUES ('Stor Palle','Emballage/StorePalleIcon.jpg',50)
 
 INSERT INTO Packagings ("Name",IconPath,PackagingWeight)
-VALUES ('Lang Trækasse','Emballage/LangTraekasseIcon.jpg',123)
+VALUES ('Lang Trækasse','Emballage/LangTraekasseIcon.jpg',35)
 
 
 INSERT INTO MaterialTypes ("Name",IconPath)

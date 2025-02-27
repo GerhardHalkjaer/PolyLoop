@@ -12,25 +12,41 @@ namespace DataAccess
         public List<MaterialType> GetAll()
         {
             List<MaterialType> materialTypes = new List<MaterialType>();
-
             string query = "SELECT * FROM MaterialTypes";
-            SqlConnection con = new SqlConnection(ConnectionString.ConString);
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            SqlDataReader dataReader = cmd.ExecuteReader();
-
-            while (dataReader.Read())
+           
+            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
             {
-                MaterialType matType = new MaterialType();
-                matType.Id = (int)dataReader["Id"];
-                matType.Name = dataReader["Name"].ToString();
-                matType.IconPath = dataReader["IconPath"].ToString();
+                SqlCommand cmd = new SqlCommand(query, con);
 
-                materialTypes.Add(matType);
-                
+                try
+                {
+
+                    con.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        MaterialType matType = new MaterialType();
+                        matType.Id = (int)dataReader["Id"];
+                        matType.Name = dataReader["Name"].ToString();
+                        matType.IconPath = dataReader["IconPath"].ToString();
+
+                        materialTypes.Add(matType);
+
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
             }
-
-            con.Close();
 
             return materialTypes;
         }
@@ -39,10 +55,7 @@ namespace DataAccess
         {
             List<MaterialType> materialTypes = new List<MaterialType>();
 
-
-
-
-
+            //TODO
 
             return materialTypes;
         }
@@ -50,10 +63,10 @@ namespace DataAccess
 
         public void SaveNew(MaterialType material)
         {
-
+            //TODO
         }
 
-        // SELECT * FROM MaterialTypes INNER JOIN SpecificTypes ON MaterialTypes.Id = SpecificTypes.MaterialTypeId
+        
 
     }
 }

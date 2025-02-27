@@ -2,6 +2,7 @@
 using DataAccess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace PolyLoopApi.Controllers
 {
@@ -21,7 +22,7 @@ namespace PolyLoopApi.Controllers
         public ActionResult<List<MaterialType>> GetAll()
         {
             List<MaterialType> result = _materialTypeRepo.GetAll();
-            return result;
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

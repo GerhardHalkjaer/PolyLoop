@@ -16,56 +16,60 @@ namespace DataAccess
             List<SpecificType> specificTypes = new List<SpecificType>();
             string query = "SELECT SpecificTypes.*, MaterialTypes.Id AS MatId, MaterialTypes.[Name] AS MatName, MaterialTypes.IconPath AS MatIconPath" +
                            " FROM MaterialTypes INNER JOIN SpecificTypes ON MaterialTypes.Id = SpecificTypes.MaterialTypeId";
-            SqlConnection con = new SqlConnection(ConnectionString.ConString);
-            SqlCommand cmd = new SqlCommand(query, con);
 
-            try
+
+            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
             {
-                con.Open();
+                SqlCommand cmd = new SqlCommand(query, con);
 
-                SqlDataReader dataReader = cmd.ExecuteReader();
-
-                while (dataReader.Read())
+                try
                 {
-                    SpecificType specType = new SpecificType();
-                    MaterialType matType = new MaterialType();
+                    con.Open();
 
-                    matType.Id = (int)dataReader["MatId"];
-                    matType.Name = dataReader["MatName"].ToString();
-                    matType.IconPath = dataReader["MatIconPath"].ToString();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
 
-                    specType.MatType = matType;
-                    specType.Id = (int)dataReader["Id"];
-                    specType.Name = dataReader["Name"].ToString();
-                    specType.IconPath = dataReader["IconPath"].ToString();
+                    while (dataReader.Read())
+                    {
+                        SpecificType specType = new SpecificType();
+                        MaterialType matType = new MaterialType();
 
-                    specificTypes.Add(specType);
+                        matType.Id = (int)dataReader["MatId"];
+                        matType.Name = dataReader["MatName"].ToString();
+                        matType.IconPath = dataReader["MatIconPath"].ToString();
+
+                        specType.MatType = matType;
+                        specType.Id = (int)dataReader["Id"];
+                        specType.Name = dataReader["Name"].ToString();
+                        specType.IconPath = dataReader["IconPath"].ToString();
+
+                        specificTypes.Add(specType);
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
                 }
 
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally 
-            {
-                con.Close();
-            }
-
 
             return specificTypes;
         }
 
         public List<SpecificType> GetById(int id)
         {
-
+            //TODO
             return null;
         }
 
         public void SaveNew(SpecificType type)
         {
-
+            //TODO
         }
 
 
