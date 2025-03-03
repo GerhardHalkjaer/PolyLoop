@@ -1,5 +1,7 @@
 ﻿using Entities;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace Services
 {
@@ -14,17 +16,64 @@ namespace Services
              apiString = @"https://localhost:7299/";
         }
 
-        public MaterialType GetAllMaterialTypes()
+
+        #region GetALL
+        public async Task<List<MaterialType>> GetAllMaterialTypesAsync()
         {
             string getall = @"/api/MaterialType";
 
-            return null;
+            return await _httpClient.GetFromJsonAsync<List<MaterialType>>(getall);
         }
 
-
-        private async Task<T?> GetDataAsync<T>(string url)
+        public async Task<List<SpecificType>> GetAllSpecificTypesAsync()
         {
-            return await _httpClient.GetFromJsonAsync<T>(url);
+            string getall = @"/api/SpecificType";
+
+            return await _httpClient.GetFromJsonAsync<List<SpecificType>>(getall);
+
         }
+
+        public async Task<List<Packaging>> GetAllPackagingsAsync()
+        {
+            string getall = @"/api/Packaging";
+
+            return await _httpClient.GetFromJsonAsync<List<Packaging>>(getall);
+        }
+
+        public async Task<List<PackagedUnit>> GetAllPackagedUnitAsync()
+        {
+            string getall = @"/api/PackagedUnit";
+
+            return await _httpClient.GetFromJsonAsync<List<PackagedUnit>>(getall);
+        }
+
+        #endregion
+
+        #region Post
+
+        public async Task<HttpResponseMessage> PostPackagedUnitAsync( PackagedUnit inPU)
+        {
+            string path = apiString + "/api/PackagedUnit";
+
+            string jsonData = JsonSerializer.Serialize(inPU);
+
+            StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _httpClient.PostAsync(path, content);
+
+            return response;
+
+        }
+
+
+        #endregion
+
+
+
+
+        //private async Task<T?> GetDataAsync<T>(string url)
+        //{
+        //    return await _httpClient.GetFromJsonAsync<T>(url);
+        //}
     }
 }

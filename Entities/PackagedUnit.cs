@@ -13,12 +13,14 @@ namespace Entities
         public Packaging Packaging { get; set; } //TODO change to object Packaging
         public int weight { get; set; }
         public string ImagePath { get; set; }
+        public DateTime ProcessedDate { get; set; }
 
         public PackagedUnit()
         {
             ImagePath = string.Empty;   
             SpecificType = new SpecificType();
             Packaging = new Packaging();
+            ProcessedDate = new DateTime();
         }
 
         public PackagedUnit(PackagedUnit InpackagedUnit)
@@ -28,6 +30,7 @@ namespace Entities
             Packaging = InpackagedUnit.Packaging;
             weight = InpackagedUnit.weight;
             ImagePath = InpackagedUnit.ImagePath;
+            ProcessedDate = InpackagedUnit.ProcessedDate;
         }
     }
 }

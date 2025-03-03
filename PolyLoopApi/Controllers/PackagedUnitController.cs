@@ -30,6 +30,20 @@ namespace PolyLoopApi.Controllers
             return result;
         }
 
+        [HttpPost]
+        public ActionResult Post([FromBody] PackagedUnit item)
+        {
+            if (item == null) {
+                return BadRequest("invalid data.");
+            }
 
+            _packagedUnitRepo.SaveNew(item);
+
+            return CreatedAtAction(nameof(GetById), new {id = item.Id},item);
+
+        } 
+
+
+        //TODO SAVE NEW
     }
 }

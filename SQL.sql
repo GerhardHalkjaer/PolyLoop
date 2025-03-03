@@ -41,7 +41,8 @@ Id int IDENTITY(5000,1) NOT NULL,
 SpecificTypeId int NOT NULL,
 PackagingId int NOT NULL,
 "Weight" int NOT NULL,
-ImagePath nvarchar(500)
+ImagePath nvarchar(500),
+ProcessedDate date
 CONSTRAINT PK_PackagedUnits_Id PRIMARY KEY(Id))
 GO
 

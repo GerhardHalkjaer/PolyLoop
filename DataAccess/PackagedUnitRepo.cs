@@ -54,7 +54,7 @@ namespace DataAccess
                         packagedUnit.weight = (int)dataReader["Weight"];
                         packagedUnit.Packaging = packaging;
                         packagedUnit.SpecificType = specificType;
-
+                        packagedUnit.ProcessedDate = DateTime.Parse(dataReader["ProcessedDate"].ToString());
 
 
                         packagedUnits.Add(packagedUnit);
