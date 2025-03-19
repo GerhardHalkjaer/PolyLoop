@@ -13,14 +13,14 @@ namespace Services
         public Service(HttpClient httpClient)
         {
             _httpClient = httpClient;
-             apiString = @"https://localhost:7299/";
+             apiString = @"https://localhost:7299";
         }
 
 
         #region GetALL
         public async Task<List<MaterialType>> GetAllMaterialTypesAsync()
         {
-            string getall = @"/api/MaterialType";
+            string getall = apiString + @"/api/MaterialType";
 
             return await _httpClient.GetFromJsonAsync<List<MaterialType>>(getall);
         }

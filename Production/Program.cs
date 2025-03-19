@@ -1,10 +1,17 @@
 using Production.Components;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<Service>(sp =>
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Service(httpClient);
+});
 
 var app = builder.Build();
 

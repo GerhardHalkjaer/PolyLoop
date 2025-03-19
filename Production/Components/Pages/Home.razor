@@ -1,7 +1,46 @@
 ﻿@page "/"
+@using Services
+@using Entities
+@inject Service myServ
+
 
 <PageTitle>Home</PageTitle>
-
+@*
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+Welcome to your new app. *@
+
+@code {
+
+    private List<MaterialType> materialTypes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        materialTypes = await myServ.GetAllMaterialTypesAsync();
+    }
+
+
+}
+
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="flex-wrap d-flex">
+            @if (materialTypes != null && materialTypes.Any())
+            {
+                @foreach (MaterialType item in materialTypes)
+                {
+                    <div class="card" style="width: 18rem;">
+                        <a href="#">
+                            <img class="card-img-top" src="/img/@item.IconPath" alt="Card image cap" onerror="this.onerror=null;this.src='/img/PH.png';" />
+                            <div class="card-overlay">@item.Name</div>
+                        </a>
+
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

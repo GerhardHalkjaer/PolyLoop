@@ -42,8 +42,17 @@ SpecificTypeId int NOT NULL,
 PackagingId int NOT NULL,
 "Weight" int NOT NULL,
 ImagePath nvarchar(500),
-ProcessedDate date
+ProcessedDate DateTime2
 CONSTRAINT PK_PackagedUnits_Id PRIMARY KEY(Id))
+GO
+
+CREATE TABLE Users(
+Id int IDENTITY(1,1) NOT NULL,
+UserName nvarchar(50) NOT NULL,
+UserPassword nvarchar(64) NOT NULL,
+Salt nvarchar(32) NOT NULL,
+AccessLevel int NOT NULL
+CONSTRAINT PK_Users_Id PRIMARY KEY(Id))
 GO
 
 ALTER TABLE SpecificTypes
