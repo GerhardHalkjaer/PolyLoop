@@ -1,5 +1,7 @@
+using Production;
 using Production.Components;
 using Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddSingleton<Service>(sp =>
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new Service(httpClient);
 });
+builder.Services.AddScoped<IBIZ, BIZ>();
 
 var app = builder.Build();
 

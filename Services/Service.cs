@@ -27,7 +27,7 @@ namespace Services
 
         public async Task<List<SpecificType>> GetAllSpecificTypesAsync()
         {
-            string getall = @"/api/SpecificType";
+            string getall = apiString + @"/api/SpecificType";
 
             return await _httpClient.GetFromJsonAsync<List<SpecificType>>(getall);
 
@@ -35,14 +35,14 @@ namespace Services
 
         public async Task<List<Packaging>> GetAllPackagingsAsync()
         {
-            string getall = @"/api/Packaging";
+            string getall = apiString + @"/api/Packaging";
 
             return await _httpClient.GetFromJsonAsync<List<Packaging>>(getall);
         }
 
         public async Task<List<PackagedUnit>> GetAllPackagedUnitAsync()
         {
-            string getall = @"/api/PackagedUnit";
+            string getall = apiString + @"/api/PackagedUnit";
 
             return await _httpClient.GetFromJsonAsync<List<PackagedUnit>>(getall);
         }
