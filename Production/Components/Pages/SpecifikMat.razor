@@ -3,22 +3,24 @@
 @using Entities
 @inject Service myServ
 @inject IBIZ Biz
-
+@rendermode InteractiveServer
 
 <div class="container mt-4">
     <div class="row">
         <div class="flex-wrap d-flex">
+            
+         
+            
             @if (specificTypes != null && specificTypes.Any())
             {
-                specificTypes = specificTypes.FindAll(x => x.MatType.Id == Biz.packagedUnit.SpecificType.MatType.Id);
+                
                 @foreach (SpecificType item in specificTypes)
                 {
-                    <div class="card" style="width: 18rem;">
-                        <a href="#" @onclick="() => SetProperty(item.Id)">
+                    <div class="card" style="width: 18rem;" @onclick="() => SetProperty(item.Id)">
+                        
                             <img class="card-img-top" src="/img/@item.IconPath" alt="Card image cap" onerror="this.onerror=null;this.src='/img/PH.png';" />
                             <div class="card-overlay">@item.Name</div>
-                        </a>
-
+                        
                     </div>
                 }
             }
@@ -34,11 +36,26 @@
     protected override async Task OnInitializedAsync()
     {
         specificTypes = await myServ.GetAllSpecificTypesAsync();
+
+        if (specificTypes != null)
+        {
+            specificTypes = specificTypes.FindAll(x => x.MatType.Id == Biz.packagedUnit.SpecificType.MatType.Id);
+        }
+        
     }
 
     private void SetProperty(int Inid)
     {
-        
+        var spec = specificTypes.FirstOrDefault(x => x.Id == Inid);
+
+        if (spec != null)
+        {
+            Biz.packagedUnit.SpecificType = spec;
+        }
+        else
+        {
+            throw new InvalidOperationException($"SpecificType with Id {Inid} was not found.");
+        }
     }
 
 }

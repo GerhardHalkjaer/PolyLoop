@@ -14,7 +14,7 @@ builder.Services.AddSingleton<Service>(sp =>
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new Service(httpClient);
 });
-builder.Services.AddScoped<IBIZ, BIZ>();
+builder.Services.AddSingleton<IBIZ, BIZ>();
 
 var app = builder.Build();
 
