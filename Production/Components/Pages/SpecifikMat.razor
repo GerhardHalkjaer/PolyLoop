@@ -8,19 +8,14 @@
 <div class="container mt-4">
     <div class="row">
         <div class="flex-wrap d-flex">
-            
-         
-            
             @if (specificTypes != null && specificTypes.Any())
-            {
-                
+            {                
                 @foreach (SpecificType item in specificTypes)
                 {
-                    <div class="card" style="width: 18rem;" @onclick="() => SetProperty(item.Id)">
+                    <div class="card" style="width: 18rem;" @onclick="() => HandleClick(item.Id)">
                         
                             <img class="card-img-top" src="/img/@item.IconPath" alt="Card image cap" onerror="this.onerror=null;this.src='/img/PH.png';" />
                             <div class="card-overlay">@item.Name</div>
-                        
                     </div>
                 }
             }
@@ -33,10 +28,16 @@
 @code {
     private List<SpecificType> specificTypes;
 
+    [Inject] NavigationManager Nav { get; set; } // Inject navigation service
+
     protected override async Task OnInitializedAsync()
     {
-        specificTypes = await myServ.GetAllSpecificTypesAsync();
+        if (Biz.packagedUnit.SpecificType.MatType.Id == -1)
+        {
+            Nav.NavigateTo("/");  // Navigate programmatically
+        }
 
+        specificTypes = await myServ.GetAllSpecificTypesAsync();
         if (specificTypes != null)
         {
             specificTypes = specificTypes.FindAll(x => x.MatType.Id == Biz.packagedUnit.SpecificType.MatType.Id);
@@ -47,15 +48,21 @@
     private void SetProperty(int Inid)
     {
         var spec = specificTypes.FirstOrDefault(x => x.Id == Inid);
-
         if (spec != null)
         {
             Biz.packagedUnit.SpecificType = spec;
+
         }
         else
         {
             throw new InvalidOperationException($"SpecificType with Id {Inid} was not found.");
         }
+    }
+
+    private void HandleClick(int id)
+    {
+        SetProperty(id);  // Set the property first
+        Nav.NavigateTo("/Emballage");  // Navigate programmatically
     }
 
 }

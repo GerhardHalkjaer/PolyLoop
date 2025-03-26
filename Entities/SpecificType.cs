@@ -14,6 +14,7 @@ namespace Entities
             MatType = new MaterialType();
             Name = string.Empty;
             IconPath = string.Empty;
+            Id = -1;
         }
 
 

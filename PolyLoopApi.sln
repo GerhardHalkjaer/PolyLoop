@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolyLoopApi", "PolyLoopApi\PolyLoopApi.csproj", "{20F1F47A-2842-44BE-944C-FCB9286A27FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolyLoopApi", "PolyLoopApi\PolyLoopApi.csproj", "{20F1F47A-2842-44BE-944C-FCB9286A27FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{4E8E3227-73B3-4D7D-8BA9-A534A823B129}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{4E8E3227-73B3-4D7D-8BA9-A534A823B129}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{B61B028D-1703-401E-8BC9-8FA0AF30F466}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{B61B028D-1703-401E-8BC9-8FA0AF30F466}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{DFA18D3C-DD98-494C-91D9-8D0FF5E53461}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{DFA18D3C-DD98-494C-91D9-8D0FF5E53461}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Production", "Production\Production.csproj", "{14252F35-AE02-4405-8BA6-9E15DF5F585C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Production", "Production\Production.csproj", "{14252F35-AE02-4405-8BA6-9E15DF5F585C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Managment", "Managment\Managment.csproj", "{112AE655-8138-4812-B911-3B820B82A9B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Managment", "Managment\Managment.csproj", "{112AE655-8138-4812-B911-3B820B82A9B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,61 @@
+﻿@page "/Emballage"
+@using Services
+@using Entities
+@inject Service myServ
+@inject IBIZ Biz
+@rendermode InteractiveServer
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="flex-wrap d-flex">
+            @if (packaging != null && packaging.Any())
+            {
+                @foreach (Packaging item in packaging)
+                {
+                    <div class="card" style="width: 18rem;" @onclick="() => HandleClick(item.Id)">
+
+                        <img class="card-img-top" src="/img/@item.IconPath" alt="Card image cap" onerror="this.onerror=null;this.src='/img/PH.png';" />
+                        <div class="card-overlay">@item.Name</div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private List<Packaging> packaging;
+
+    [Inject] NavigationManager Nav { get; set; } // Inject navigation service
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        packaging = await myServ.GetAllPackagingsAsync();
+    }
+
+
+    private void SetProperty(int Inid)
+    {
+        var pack = packaging.FirstOrDefault(x => x.Id == Inid);
+        if (pack != null)
+        {
+            Biz.packagedUnit.Packaging = pack;
+
+        }
+        else
+        {
+            throw new InvalidOperationException($"packaging with Id {Inid} was not found.");
+        }
+    }
+
+    private void HandleClick(int id)
+    {
+        SetProperty(id);  // Set the property first
+        Nav.NavigateTo("/Emballage");  // Navigate programmatically
+    }
+
+
+
+}

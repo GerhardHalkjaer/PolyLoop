@@ -1,0 +1,78 @@
+﻿@page "/PictureCapture"
+@using Services
+@using Entities
+@inject Service myServ
+@inject IBIZ Biz
+@using Production.Model
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+@code {
+
+    /// <summary>
+    /// Initializes and starts both cameras by invoking the JavaScript function.
+    /// </summary>
+    /// <returns></returns>
+    private async Task StartCameras()
+    {
+        string[] videoIds = { "video1", "video2" };
+        await JS.InvokeVoidAsync("startCameras", (object)videoIds);
+    }
+
+    /// <summary>
+    /// Captures an image from the specified camera and sends it to the server.
+    /// </summary>
+    /// <param name="camIndex">The index of the camera (0 for first camera, 1 for second camera).</param>
+    /// <returns></returns>
+    private async Task CaptureAndSend(int camIndex)
+    {
+        string videoId = camIndex == 0 ? "video1" : "video2";
+        string base64Image = await JS.InvokeAsync<string>("captureImage", videoId);
+        if (!string.IsNullOrEmpty(base64Image))
+        {
+            await SendToServer(camIndex, base64Image);
+        }
+    }
+
+    /// <summary>
+    /// used to send the image to the server
+    /// TODO: not yet implemented
+    /// </summary>
+    /// <param name="camIndex"></param>
+    /// <param name="base64Image"></param>
+    /// <returns></returns>
+    private async Task SendToServer(int camIndex, string base64Image)
+    {
+        var imageData = new WebcamImage { CameraIndex = camIndex, Base64Data = base64Image };
+        // await Http.PostAsJsonAsync("api/webcam/upload", imageData);
+    }
+
+    /// <summary>
+    /// used to request camera access from the browser
+    /// else the browser will not allow the camera to be accessed the 2nd camera
+    /// </summary>
+    /// <returns></returns>
+    private async Task RequestCameras()
+    {
+        await JS.InvokeVoidAsync("requestCameras");
+    }
+
+}
+
+<button @onclick="StartCameras">Start Cameras</button>
+
+<button @onclick="RequestCameras">Grant Camera Access</button>
+
+
+<div>
+    <video id="video1" autoplay playsinline width="320" height="240"></video>
+    <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button>
+</div>
+<div>
+    <video id="video2" autoplay playsinline width="320" height="240"></video>
+    <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button>
+</div>
+
+
+
+

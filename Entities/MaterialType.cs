@@ -12,6 +12,7 @@
         {
             Name = string.Empty;
             IconPath = string.Empty;
+            Id = -1;
         }
 
         public MaterialType(MaterialType InMatType)
