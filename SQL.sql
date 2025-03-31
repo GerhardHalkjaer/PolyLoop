@@ -42,6 +42,8 @@ SpecificTypeId int NOT NULL,
 PackagingId int NOT NULL,
 "Weight" int NOT NULL,
 ImagePath nvarchar(500),
+UserPacking int,
+StartDate DateTime2 NOT NULL,
 ProcessedDate DateTime2
 CONSTRAINT PK_PackagedUnits_Id PRIMARY KEY(Id))
 GO
@@ -65,6 +67,9 @@ ALTER TABLE PackagedUnits
 
 ALTER TABLE PackagedUnits
 	ADD CONSTRAINT FK_PackagingId FOREIGN KEY (PackagingId)
+	REFERENCES Packagings(Id)
+ALTER TABLE PackagedUnits
+	ADD CONSTRAINT FK_UserPackingId FOREIGN KEY (UserPacking)
 	REFERENCES Packagings(Id)
 GO
 
@@ -122,162 +127,162 @@ VALUES ('ANDRE','Materialetype/Andre.jpg')
 GO
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ABS'),'ABS OC Farvet','Materialetype/Specific/ABSOCFarvet.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ABS'),'ABS OC Farvet','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ABS'),'ABS OC Hvid','Materialetype/Specific/ABSOCHvid.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ABS'),'ABS OC Hvid','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ABS'),'ABS Regrind','Materialetype/Specific/ABSRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ABS'),'ABS Regrind','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ALU'),'ALU Composite OC','Materialetype/Specific/ALUCompositeOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ALU'),'ALU Composite OC','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ALU'),'ALU Ren','Materialetype/Specific/ALURen.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ALU'),'ALU Ren','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PET'),'PETG OC','Materialetype/Specific/PETGOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PET'),'PETG OC','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PET'),'PETP OC','Materialetype/Specific/PETPOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PET'),'PETP OC','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PET'),'A-Pet','Materialetype/Specific/A-Pet.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PET'),'A-Pet','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'PS Hvid','Materialetype/Specific/PSHvid.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'PS Hvid','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'PS Farvet','Materialetype/Specific/PSFarvet.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'PS Farvet','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'PS Natur (GPPS)','Materialetype/Specific/PSNatur.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'PS Natur (GPPS)','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'EPS','Materialetype/Specific/PSEPS.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'EPS','Materialetype/Specific/Type04.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'XPS Blue','Materialetype/Specific/PSXPSBlue.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PS'),'XPS Blue','Materialetype/Specific/Type05.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA OC Mix','Materialetype/Specific/PAOCMix.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA OC Mix','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA6 Injection regrind','Materialetype/Specific/PA6InjectionRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA6 Injection regrind','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA 6 REGRIND GF','Materialetype/Specific/PA6RegrindGF.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA 6 REGRIND GF','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA66 Injection Regrind','Materialetype/Specific/PA66InjectionRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PA'),'PA66 Injection Regrind','Materialetype/Specific/Type04.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PC'),'PC OC','Materialetype/Specific/PCOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PC'),'PC OC','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PC'),'PC OC Twinwall','Materialetype/Specific/PCOCTwinwall.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PC'),'PC OC Twinwall','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PC'),'PC Kværnet Materiale','Materialetype/Specific/PCKvaernet.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PC'),'PC Kværnet Materiale','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 100','Materialetype/Specific/PE100.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 100','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 300','Materialetype/Specific/PE300.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 300','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 500-1000 Natural','Materialetype/Specific/PE500-1000Natural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 500-1000 Natural','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 500-1000 Sort','Materialetype/Specific/PE500-1000Sort.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 500-1000 Sort','Materialetype/Specific/Type04.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 500-1000 Farvet','Materialetype/Specific/PE500-1000Farvet.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE 500-1000 Farvet','Materialetype/Specific/Type05.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE Film 60/40','Materialetype/Specific/PEFilm6040.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE Film 60/40','Materialetype/Specific/Type06.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE Film Natural','Materialetype/Specific/PEFilmNatural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE Film Natural','Materialetype/Specific/Type07.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE Regrind','Materialetype/Specific/PERegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PE'),'PE Regrind','Materialetype/Specific/Type08.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA XT Natural','Materialetype/Specific/PMMAXTNatural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA XT Natural','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA XT Opal','Materialetype/Specific/PMMAXTOpal.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA XT Opal','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA XT ALU','Materialetype/Specific/PMMAXTAlu.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA XT ALU','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA CAST Natural','Materialetype/Specific/PMMACastNatural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA CAST Natural','Materialetype/Specific/Type04.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA Dark Colour Shredded','Materialetype/Specific/PMMADarkColourShredded.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA Dark Colour Shredded','Materialetype/Specific/Type05.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA Mix OC','Materialetype/Specific/PMMAMixOc.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PMMA'),'PMMA Mix OC','Materialetype/Specific/Type06.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'POM'),'POM OC','Materialetype/Specific/POMOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'POM'),'POM OC','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'POM'),'POM Regrind','Materialetype/Specific/POMRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'POM'),'POM Regrind','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP Mix OC','Materialetype/Specific/PPMixOc.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP Mix OC','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP OC Natural','Materialetype/Specific/PPOcNatural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP OC Natural','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP Blå Baller','Materialetype/Specific/PPBlaaBaller.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP Blå Baller','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP Regrind Mix Colour','Materialetype/Specific/PPRegrindMixColour.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PP'),'PP Regrind Mix Colour','Materialetype/Specific/Type04.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PVC'),'PVC OC Foam','Materialetype/Specific/PVCOcFoam.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PVC'),'PVC OC Foam','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PVC'),'PVC OC Solid','Materialetype/Specific/PVCOcSolid.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'PVC'),'PVC OC Solid','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PTFE OC','Materialetype/Specific/AndrePTFEOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PTFE OC','Materialetype/Specific/Type01.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'SAN OC','Materialetype/Specific/AndreSANOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'SAN OC','Materialetype/Specific/Type02.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'Silicone Natural','Materialetype/Specific/AndreSiliconeNatural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'Silicone Natural','Materialetype/Specific/Type03.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PBT Regrind','Materialetype/Specific/AndrePBTRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PBT Regrind','Materialetype/Specific/Type04.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'ECTFE Regrind Natural','Materialetype/Specific/AndreECTFERegrindNatural.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'ECTFE Regrind Natural','Materialetype/Specific/Type05.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PVDF','Materialetype/Specific/AndrePVDF.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PVDF','Materialetype/Specific/Type06.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PPS Injection','Materialetype/Specific/AndrePPSInjection.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PPS Injection','Materialetype/Specific/Type07.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PEEK OC and Lumps','Materialetype/Specific/AndrePEEKOCAndLumps.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PEEK OC and Lumps','Materialetype/Specific/Type08.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'Elastomer Regrind','Materialetype/Specific/AndreElastomerRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'Elastomer Regrind','Materialetype/Specific/Type09.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PC/ABS Regrind','Materialetype/Specific/AndrePCABSRegrind.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PC/ABS Regrind','Materialetype/Specific/Type10.jpg')
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
-VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PSU OC','Materialetype/Specific/AndrePSUOC.jpg')
+VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PSU OC','Materialetype/Specific/Type11.jpg')
 
 GO

@@ -7,6 +7,24 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JS
 
+
+
+<button @onclick="StartCameras">Start Cameras</button>
+
+<button @onclick="RequestCameras">Grant Camera Access</button>
+
+
+<div>
+    <video id="video1" autoplay playsinline width="320" height="240"></video>
+    <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button>
+</div>
+<div>
+    <video id="video2" autoplay playsinline width="320" height="240"></video>
+    <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button>
+</div>
+
+
+
 @code {
 
     /// <summary>
@@ -58,20 +76,6 @@
     }
 
 }
-
-<button @onclick="StartCameras">Start Cameras</button>
-
-<button @onclick="RequestCameras">Grant Camera Access</button>
-
-
-<div>
-    <video id="video1" autoplay playsinline width="320" height="240"></video>
-    <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button>
-</div>
-<div>
-    <video id="video2" autoplay playsinline width="320" height="240"></video>
-    <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button>
-</div>
 
 
 
