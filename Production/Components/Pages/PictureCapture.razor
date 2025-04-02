@@ -6,7 +6,7 @@
 @using Production.Model
 @rendermode InteractiveServer
 @inject IJSRuntime JS
-
+@using System.Diagnostics
 
 
 <button @onclick="StartCameras">Start Cameras</button>
@@ -15,11 +15,11 @@
 
 
 <div>
-    <video id="video1" autoplay playsinline width="320" height="240"></video>
+    <video id="video1" autoplay playsinline crossorigin="anonymous" width="435" height="326"></video>
     <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button>
 </div>
 <div>
-    <video id="video2" autoplay playsinline width="320" height="240"></video>
+    <video id="video2" autoplay playsinline crossorigin="anonymous" width="435" height="326"></video>
     <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button>
 </div>
 
@@ -44,11 +44,41 @@
     /// <returns></returns>
     private async Task CaptureAndSend(int camIndex)
     {
+
+        Debug.WriteLine("starter");
         string videoId = camIndex == 0 ? "video1" : "video2";
-        string base64Image = await JS.InvokeAsync<string>("captureImage", videoId);
-        if (!string.IsNullOrEmpty(base64Image))
+        Debug.WriteLine(videoId);
+        try
         {
-            await SendToServer(camIndex, base64Image);
+            Debug.WriteLine($"Attempting to capture image from: {videoId}");
+
+            string base64Image = await JS.InvokeAsync<string>("captureImage",videoId);
+
+            Debug.WriteLine(base64Image); //to show what is being returned
+            
+            
+            Debug.WriteLine($"Captured image (Base64 length: {base64Image?.Length ?? 0})");
+
+            if (!string.IsNullOrEmpty(base64Image))
+            {
+                await SendToServer(camIndex, base64Image);
+            }
+            else
+            {
+                Debug.WriteLine("No image captured.");
+            }
+        }
+        catch (TaskCanceledException ex)
+        {
+            Debug.WriteLine($"TaskCanceledException: {ex.Message}");
+        }
+        catch (JSException ex)
+        {
+            Debug.WriteLine($"JSException: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Unexpected error: {ex.Message}");
         }
     }
 
@@ -63,6 +93,27 @@
     {
         var imageData = new WebcamImage { CameraIndex = camIndex, Base64Data = base64Image };
         // await Http.PostAsJsonAsync("api/webcam/upload", imageData);
+
+
+        // Remove the data URL prefix (if it exists)
+        string base64 = imageData.Base64Data;
+        if (base64.StartsWith("data:image"))
+        {
+            var commaIndex = base64.IndexOf(',');
+            base64 = base64.Substring(commaIndex + 1);
+        }
+
+        // Decode the base64 string into bytes
+        byte[] imageBytes = Convert.FromBase64String(base64);
+
+        // Specify a path to save the image
+        string filePath = Path.Combine("C:\\codeFolder", $"camera_{imageData.CameraIndex}_image_{DateTime.Now.Ticks}.png");
+
+        // Write the bytes to a file
+        await File.WriteAllBytesAsync(filePath, imageBytes);
+
+        Console.WriteLine($"Image saved to: {filePath}");
+
     }
 
     /// <summary>

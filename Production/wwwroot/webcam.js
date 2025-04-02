@@ -10,7 +10,7 @@ let streamRefs = [];
  */
 async function startCameras(videoIds) {
     
-
+    //TODO remake to check if there are permissions to use camera or check if there are 2 cameras if not ask for permission
     // Ensure videoIds is an array
     if (!Array.isArray(videoIds)) {
         console.error("videoIds must be an array.");
@@ -44,15 +44,48 @@ async function startCameras(videoIds) {
  * @returns {string|null} - Base64 encoded image or null if capture fails.
  */
 function captureImage(videoId) {
+    
     let video = document.getElementById(videoId);
-    if (!video) return null;
+    if (!video) {
+        console.error("🚨 Video element not found:", videoId);
+        return "ERROR_NO_VIDEO";
+    }
 
+
+    if (video.readyState < 2) {  // Ensure video has enough data
+        console.error("🚨 Video is not ready yet.");
+        return "ERROR_VIDEO_NOT_READY";
+    }
+
+    console.log("✅ Video found & is ready");
+
+
+ 
     let canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = (video.videoWidth);
+    canvas.height = (video.videoHeight);
+
+    console.log("✅ Canvas created:", canvas.width, "x", canvas.height);
+
     let ctx = canvas.getContext("2d");
+    if (!ctx) {
+        console.error("🚨 Failed to get 2D context.");
+        return "ERROR_CANVAS_CONTEXT";
+    }
+    console.error("test error");
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL("image/jpeg");
+    console.log("i can draw");
+
+    try {
+        let imageData = canvas.toDataURL("image/jpeg",0.68);
+        console.log("✅ Image captured successfully");
+        console.log(imageData);
+
+        return imageData;
+    } catch (err) {
+        console.error("🚨 Error during toDataURL():", err);
+        return "ERROR_CAPTURE_FAILED";
+    }
 }
 
 /**
