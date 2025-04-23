@@ -62,8 +62,12 @@ function captureImage(videoId) {
 
  
     let canvas = document.createElement("canvas");
-    canvas.width = (video.videoWidth);
-    canvas.height = (video.videoHeight);
+
+    let width = 1280;
+    let height = 720;
+
+    canvas.width = (width);
+    canvas.height = (height);
 
     console.log("✅ Canvas created:", canvas.width, "x", canvas.height);
 
@@ -77,7 +81,7 @@ function captureImage(videoId) {
     console.log("i can draw");
 
     try {
-        let imageData = canvas.toDataURL("image/jpeg",0.68);
+        let imageData = canvas.toDataURL("image/jpeg",1);
         console.log("✅ Image captured successfully");
         console.log(imageData);
 

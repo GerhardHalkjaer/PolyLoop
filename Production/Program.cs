@@ -16,6 +16,19 @@ builder.Services.AddSingleton<Service>(sp =>
 });
 builder.Services.AddSingleton<IBIZ, BIZ>();
 
+
+builder.Services.AddServerSideBlazor()
+    .AddCircuitOptions(options =>
+    {
+        options.DetailedErrors = true;
+    });
+
+builder.Services.AddSignalR(options =>
+{
+    // Increase maximum message size limit to 10 MB (for example)
+    options.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10 MB
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
