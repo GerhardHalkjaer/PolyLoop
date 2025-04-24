@@ -64,10 +64,10 @@ function captureImage(videoId) {
     let canvas = document.createElement("canvas");
 
     let width = 1280;
-    let height = 720;
+    let height = 960;
 
-    canvas.width = (width);
-    canvas.height = (height);
+    canvas.width = (video.width);
+    canvas.height = (video.height);
 
     console.log("✅ Canvas created:", canvas.width, "x", canvas.height);
 

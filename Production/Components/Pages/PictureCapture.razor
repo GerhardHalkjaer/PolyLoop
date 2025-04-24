@@ -9,23 +9,34 @@
 @using System.Diagnostics
 
 
-<button @onclick="StartCameras">Start Cameras</button>
-
-<button @onclick="RequestCameras">Grant Camera Access</button>
-
+@* <button @onclick="StartCameras">Start Cameras</button>
+ *
+ * <button @onclick="RequestCameras">Grant Camera Access</button>
+ *@
 
 <div>
-    <video id="video1" autoplay playsinline crossorigin="anonymous" width="435" height="326"></video>
+    <video id="video1" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
     <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button>
 </div>
 <div>
-    <video id="video2" autoplay playsinline crossorigin="anonymous" width="435" height="326"></video>
+    <video id="video2" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
     <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button>
 </div>
 
 
 
 @code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await RequestCameras();
+            await StartCameras();
+        }
+               
+    }
+
 
     /// <summary>
     /// Initializes and starts both cameras by invoking the JavaScript function.
@@ -51,12 +62,7 @@
         try
         {
             Debug.WriteLine($"Attempting to capture image from: {videoId}");
-
             string base64Image = await JS.InvokeAsync<string>("captureImage",videoId);
-
-            Debug.WriteLine(base64Image); //to show what is being returned
-            
-            
             Debug.WriteLine($"Captured image (Base64 length: {base64Image?.Length ?? 0})");
 
             if (!string.IsNullOrEmpty(base64Image))
@@ -113,6 +119,9 @@
         await File.WriteAllBytesAsync(filePath, imageBytes);
 
         Console.WriteLine($"Image saved to: {filePath}");
+
+
+        //TODO: change to oneDrive location.
 
     }
 
