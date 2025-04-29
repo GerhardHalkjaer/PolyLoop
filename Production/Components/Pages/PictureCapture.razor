@@ -16,27 +16,62 @@
 
 <div>
     <video id="video1" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
-    <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button>
+   @*  <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button> *@
 </div>
 <div>
     <video id="video2" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
-    <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button>
+   @*  <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button> *@
 </div>
 
 
 
 @code {
 
+    private string[] videoIds = { "video1", "video2" };
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            //first request access to camesras, then start the cameras
+            //then snapshot with both cameras
+            //then get the id's of the cameras
+            //from the id's figure out what camera is for what TODO:figure out how to identify the cameras and save that info, maybe cookies?
+            //then the img thats for weight send that to the img to text convertion.
+            //then the img of the plastic itself send to server for saving.
+            //Followed by stopping the cameras.
+            //then move on the label printing.
+
             await RequestCameras();
             await StartCameras();
+
+            string img1 = await CaptureImg(0);
+            string img2 = await CaptureImg(1);
+
+            List<string> listID = await GetVidpids();
+
+            await SendToServer(0, img1);
+            await SendToServer(1, img2);
+
+            
+
+            await StopCameras();
+
+
+            //TODO: 
+
         }
-               
+
     }
 
+
+
+    private async Task<List<string>> GetVidpids()
+    {
+        List<string> listOfVidIDs = await JS.InvokeAsync<List<string>>("sendVidPids");
+       
+        return listOfVidIDs;
+    }
 
     /// <summary>
     /// Initializes and starts both cameras by invoking the JavaScript function.
@@ -44,7 +79,7 @@
     /// <returns></returns>
     private async Task StartCameras()
     {
-        string[] videoIds = { "video1", "video2" };
+        //string[] videoIds = { "video1", "video2" };
         await JS.InvokeVoidAsync("startCameras", (object)videoIds);
     }
 
@@ -53,7 +88,7 @@
     /// </summary>
     /// <param name="camIndex">The index of the camera (0 for first camera, 1 for second camera).</param>
     /// <returns></returns>
-    private async Task CaptureAndSend(int camIndex)
+    private async Task<string> CaptureImg(int camIndex)
     {
 
         Debug.WriteLine("starter");
@@ -67,26 +102,40 @@
 
             if (!string.IsNullOrEmpty(base64Image))
             {
-                await SendToServer(camIndex, base64Image);
+                //await SendToServer(camIndex, base64Image);
+                //TODO: change so it doesnt send to server but return the img.
+
+                return base64Image;
+
             }
             else
             {
                 Debug.WriteLine("No image captured.");
+                return null;
             }
         }
         catch (TaskCanceledException ex)
         {
             Debug.WriteLine($"TaskCanceledException: {ex.Message}");
+            return null;
         }
         catch (JSException ex)
         {
             Debug.WriteLine($"JSException: {ex.Message}");
+            return null;
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Unexpected error: {ex.Message}");
+            return null;
         }
     }
+
+    private async Task StopCameras()
+    {
+        await JS.InvokeVoidAsync("stopCameras");
+    }
+
 
     /// <summary>
     /// used to send the image to the server

@@ -115,3 +115,43 @@ async function requestCameras() {
         console.error("Camera permission denied:", error);
     }
 }
+
+
+async function sendVidPids() {
+    try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+    } catch (e) {
+        console.error("Camera permission denied:", e);
+        return;
+    }
+
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const vidpids = devices
+        .filter(d => d.kind === "videoinput")
+        .map(cam => {
+            const match = cam.label.match(/\((\w{4}:\w{4})\)/);
+            return match ? match[1] : null;
+        })
+        .filter(v => v !== null);
+
+
+    console.log("VID:PID list:", vidpids);
+
+    return vidpids;
+
+    //DotNet.invokeMethodAsync('YourAssemblyName', 'ReceiveVidPids', vidpids)
+    //    .then(() => console.log("VID:PID list sent to .NET"))
+    //    .catch(err => console.error("Error sending to .NET:", err));
+}
+
+async function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null; // Return null if the cookie is not found
+}
+
+
+
+
+
