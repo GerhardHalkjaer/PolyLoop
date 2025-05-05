@@ -1,5 +1,15 @@
-﻿@using Services
+﻿@page "/PrintLabel"
+@using Services
 @using Entities
+@using QRCoder
+
+@using System.Drawing
+@using System.Drawing.Printing;
+@using System.Drawing.Imaging
+@using System.IO
+
+@using System.Net.Sockets
+@using System.Text
 @inject Service myServ
 @inject IBIZ Biz
 @rendermode InteractiveServer
@@ -7,6 +17,184 @@
 
 <h3>PrintLabel</h3>
 
-@code {
 
+
+<input @bind="inputText" placeholder="Enter text" />
+<button @onclick="testQrCode">Generate QR Code</button>
+
+@if (!string.IsNullOrEmpty(qrCodeImage))
+{
+    <div>
+        <img src="@qrCodeImage" alt="QR Code" width="472" height="472" />
+    </div>
+}
+
+
+
+
+@code {
+    //last page
+    //take all the info from the object in biz and build a label to print
+    //and print it
+    //finish by resetting the object and return to first page
+
+    // print size is 50mm x 62mm
+    // try a QrCode size of 40mm x 40mm = 472px x 472px
+
+
+
+
+    private string inputText = "ID:10000;NAME:PsHvid extra text;KG:500;Date:02-02-2025";
+    private string qrCodeImage = string.Empty;
+    private bool _started = false;
+
+    
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_started)
+        {
+            _started = true;
+            await InitializeProcess();
+        }
+    }
+
+    private async Task InitializeProcess()
+    {
+        testPrint();
+    }
+
+
+
+
+    public void testQrCode()
+    {
+        byte[] gQrCode = GenerateQrCode(inputText);
+        var base64 = Convert.ToBase64String(gQrCode);
+        qrCodeImage = $"data:image/png;base64,{base64}";
+    }
+
+    public void testPrint()
+    {
+
+        var printDoc = new PrintDocument();
+        printDoc.PrinterSettings.PrinterName = "Brother QL-820NWB Printer";
+        printDoc.PrintPage += (s, e) =>
+        {
+            Graphics g = e.Graphics;
+
+
+            using (var qr = new QRCodeGenerator())
+            {
+                QRCodeData data = qr.CreateQrCode("ID:10000;NAME:PsHvid extra text;KG:500;Date:02-02-2025", QRCodeGenerator.ECCLevel.Q);
+                Bitmap qrImg = new QRCode(data).GetGraphic(10);
+                
+                int qrX = 10;
+                int qrY = 10;
+                int qrSize = 150;
+
+                g.DrawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+
+                // Rotate and draw text beside QR
+                g.TranslateTransform(170, 150); // Move origin to where text should appear
+                g.RotateTransform(-90); // Rotate counter-clockwise
+                using Font font = new Font("Arial", 14, FontStyle.Bold);
+                g.DrawString("Hello, Brother!", font, Brushes.Black, 0, -20);
+                g.DrawString("Hello, Brother!", font, Brushes.Black, 0, 0);
+                g.DrawString("Hello, Brother!", font, Brushes.Black, 0, 20);
+
+                // Reset transform for future drawing (optional)
+                g.ResetTransform();
+
+                //e.Graphics.DrawImage(qrImg, qrX, qrY, 150, 150);
+            }
+
+           // e.Graphics.DrawString("Hello, Brother!", new Font("Arial", 12), Brushes.Black, new PointF(10, 170));
+        };
+
+        printDoc.Print();
+
+
+
+    //     string escpCommand = "\x1B\x40"; // Initialize printer
+    //    // escpCommand += @"\x1B(s591W"; // Set label width to 591 dots
+    //    // escpCommand += @"\x1B(s732H"; // Set label height to 732 dots
+    //     escpCommand += @"Hello, World!"; // Text to print
+    //    // escpCommand += @"\f"; // Form feed (print and feed)
+    //     escpCommand += "\x0C"; // Form feed (print and feed)
+
+
+    //     bool res =  RawPrinterHelper.SendStringToPrinter("Brother QL-820NWB Printer", escpCommand);
+
+    //     if (res)
+    //     {
+    //         Console.WriteLine("sent");
+    //     }
+    //     else
+    //     {
+            
+    //         Console.WriteLine("failed");
+    //     }
+
+
+
+
+        // string printerIp = "192.168.0.101"; // Replace with the actual IP address of the printer
+        // int printerPort = 9100; // Common port for many network printers (ensure your printer uses this port)
+
+        // string labelText = "Hello, Brother Printer!";
+
+        // // ESC/P-R control commands as strings
+        // string initCommandStr = "\x1B\x40"; // ESC @ (Initialize Printer)
+        // string setTextSizeStr = "\x1B\x21\x11"; // ESC ! (Set Text Size)
+
+        // // Form feed command (to signal end of print job)
+        // string formFeedCommandStr = "\x0C"; // Form Feed (FF)
+
+        // // Combine all commands and label text into one string
+        // string printCommandStr = initCommandStr + setTextSizeStr + labelText + formFeedCommandStr;
+
+        // // Convert the command string into a byte array for network communication
+        // byte[] printCommands = Encoding.ASCII.GetBytes(printCommandStr);
+
+        // // Send the combined commands to the printer over the network
+        // SendToPrinter(printerIp, printerPort, printCommands);
+
+    }
+
+    private void SendToPrinter(string printerIp, int printerPort, byte[] data)
+    {
+        try
+        {
+            using (TcpClient client = new TcpClient(printerIp, printerPort))
+            {
+                NetworkStream stream = client.GetStream();
+
+                // Send data to the printer
+                stream.Write(data, 0, data.Length);
+                stream.Flush();
+            }
+            Console.WriteLine("Data sent to printer successfully.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error sending data to printer: " + ex.Message);
+        }
+    }
+
+
+    public byte[] GenerateQrCode(string text)
+    {
+        QRCodeGenerator qrGenerator = new QRCodeGenerator(); // initializes the QR code generator
+        QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q); //generates the QR code data with a specified error correction level.
+        QRCode qrCode = new QRCode(qrCodeData);
+        Bitmap bitmap = qrCode.GetGraphic(20); // creates a bitmap image of the QR code with a pixel size of 20.
+        MemoryStream ms = new MemoryStream();
+        bitmap.Save(ms, ImageFormat.Png);
+        return ms.ToArray();
+    }
+    
+     
+    
 }

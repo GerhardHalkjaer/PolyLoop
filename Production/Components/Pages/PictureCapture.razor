@@ -27,41 +27,52 @@
 
 @code {
 
+    [Inject] NavigationManager Nav { get; set; } // Inject navigation service
+
+    private bool _started = false;
     private string[] videoIds = { "video1", "video2" };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && !_started)
         {
-            //first request access to camesras, then start the cameras
-            //then snapshot with both cameras
-            //then get the id's of the cameras
-            //from the id's figure out what camera is for what TODO:figure out how to identify the cameras and save that info, maybe cookies?
-            //then the img thats for weight send that to the img to text convertion.
-            //then the img of the plastic itself send to server for saving.
-            //Followed by stopping the cameras.
-            //then move on the label printing.
-
-            await RequestCameras();
-            await StartCameras();
-
-            string img1 = await CaptureImg(0);
-            string img2 = await CaptureImg(1);
-
-            List<string> listID = await GetVidpids();
-
-            await SendToServer(0, img1);
-            await SendToServer(1, img2);
-
-            
-
-            await StopCameras();
-
-
-            //TODO: 
-
+            _started = true;
+            await InitializeProcess();
         }
 
+    }
+
+    private async Task InitializeProcess()
+    {
+
+        //first request access to camesras, then start the cameras
+        //then snapshot with both cameras
+        //then get the id's of the cameras
+        //from the id's figure out what camera is for what TODO:figure out how to identify the cameras and save that info, maybe cookies?
+        //then the img thats for weight send that to the img to text convertion.
+        //then the img of the plastic itself send to server for saving.
+        //Followed by stopping the cameras.
+        //then move on the label printing.
+
+
+        await RequestCameras();
+        await StartCameras();
+
+        string img1 = await CaptureImg(0);
+        string img2 = await CaptureImg(1);
+
+        List<string> listID = await GetVidpids();
+
+        await SendToServer(0, img1);
+        await SendToServer(1, img2);
+
+
+
+        await StopCameras();
+
+        Nav.NavigateTo("/PrintLabel");
+
+        //TODO:
     }
 
 
