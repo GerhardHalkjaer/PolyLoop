@@ -15,6 +15,8 @@ namespace Entities
         public string ImagePath { get; set; }
         public DateTime ProcessedDate { get; set; }
 
+        public int UserPacking { get; set; }
+
         public PackagedUnit()
         {
             ImagePath = string.Empty;   
@@ -31,6 +33,7 @@ namespace Entities
             weight = InpackagedUnit.weight;
             ImagePath = InpackagedUnit.ImagePath;
             ProcessedDate = InpackagedUnit.ProcessedDate;
+            UserPacking = InpackagedUnit.UserPacking;
         }
     }
 }

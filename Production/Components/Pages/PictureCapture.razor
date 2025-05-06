@@ -31,6 +31,7 @@
 
     private bool _started = false;
     private string[] videoIds = { "video1", "video2" };
+    private string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -63,6 +64,12 @@
 
         List<string> listID = await GetVidpids();
 
+
+        await SetProcessDate();
+
+
+
+
         await SendToServer(0, img1);
         await SendToServer(1, img2);
 
@@ -70,17 +77,31 @@
 
         await StopCameras();
 
+        //TODO:
+
+
         Nav.NavigateTo("/PrintLabel");
 
-        //TODO:
+
     }
 
+    /// <summary>
+    /// sets the processed date of the packaged unit to now.
+    /// </summary>
+    /// <returns></returns>
+    private async Task SetProcessDate()
+    {
+        Biz.packagedUnit.ProcessedDate = DateTime.Now;
+    }
 
-
+    /// <summary>
+    /// get the id's of the cameras
+    /// </summary>
+    /// <returns></returns>
     private async Task<List<string>> GetVidpids()
     {
         List<string> listOfVidIDs = await JS.InvokeAsync<List<string>>("sendVidPids");
-       
+
         return listOfVidIDs;
     }
 
@@ -172,8 +193,14 @@
         // Decode the base64 string into bytes
         byte[] imageBytes = Convert.FromBase64String(base64);
 
+        // File name
+        string fileName = $"ID_{Biz.packagedUnit.Id}_image_{DateTime.Now.Ticks}.png";
+
         // Specify a path to save the image
-        string filePath = Path.Combine("C:\\codeFolder", $"camera_{imageData.CameraIndex}_image_{DateTime.Now.Ticks}.png");
+        string filePath = Path.Combine($@"{oneDrivePath}\PolyLoopImg", fileName);
+
+        // put filename in Biz.packagedUnit
+        Biz.packagedUnit.ImagePath = fileName;
 
         // Write the bytes to a file
         await File.WriteAllBytesAsync(filePath, imageBytes);

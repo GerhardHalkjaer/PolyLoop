@@ -10,6 +10,11 @@ namespace DataAccess
 {
     public class PackagedUnitRepo
     {
+
+        /// <summary>
+        /// get all packaged units from the db
+        /// </summary>
+        /// <returns>List<PackagedUnit></returns>
         public List<PackagedUnit> GetAll()
         {
             List<PackagedUnit> packagedUnits = new List<PackagedUnit>();
@@ -55,7 +60,7 @@ namespace DataAccess
                         packagedUnit.Packaging = packaging;
                         packagedUnit.SpecificType = specificType;
                         packagedUnit.ProcessedDate = DateTime.Parse(dataReader["ProcessedDate"].ToString());
-
+                        packagedUnit.UserPacking = (int)dataReader["UserPacking"]; //TODO: change to make a user object
 
                         packagedUnits.Add(packagedUnit);
 
@@ -74,7 +79,7 @@ namespace DataAccess
 
             }
 
-            //TODO
+
             return packagedUnits;
         }
 
@@ -84,9 +89,100 @@ namespace DataAccess
             return null;
         }
 
-        public void SaveNew(PackagedUnit type)
+
+        /// <summary>
+        /// save new packaged unit to the db
+        /// </summary>
+        /// <param name="type">PackagedUnit</param>
+        /// <returns>int Id</returns>
+        public int SaveNew(PackagedUnit type)
         {
+            //TODO: [StartDate]
+            string sql = "INSERT INTO PackagedUnits (ImagePath, Weight, StartDate, PackagingId, SpecificTypeId, UserPackingId) " +
+                "OUTPUT INSERTED.Id " +
+                "VALUES (@ImagePath, @Weight, @StartDate, @PackagingId, @SpecificTypeId, @UserPackingId);";
+
+            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            {
+                SqlCommand cmd = new SqlCommand(sql, con);
+
+                try
+                {
+                    con.Open();
+
+
+                    cmd.Parameters.AddWithValue("@ImagePath", type.ImagePath);
+                    cmd.Parameters.AddWithValue("@Weight", type.weight);
+                    cmd.Parameters.AddWithValue("@StartDate", type.ProcessedDate);
+                    cmd.Parameters.AddWithValue("@PackagingId", type.Packaging.Id);
+                    cmd.Parameters.AddWithValue("@SpecificTypeId", type.SpecificType.Id);
+                    cmd.Parameters.AddWithValue("@UserPackingId", type.UserPacking);
+
+                    return (int)cmd.ExecuteScalar(); // gets the Id and returns it
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+
+                //TODO
+
+            }
+        }
+        /// <summary>
+        /// Get the last Id from the PackagedUnits table
+        /// </summary>
+        /// <returns></returns>
+        public int GetLastId()
+        {
+            string query = "SELECT TOP 1 Id FROM PackagedUnits";
+
+            int lastId = 0;
+
+            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            {
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                try
+                {
+                    con.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        lastId = (int)dataReader["Id"];
+
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+            }
+
             //TODO
+            return lastId;
+
+
+
+            // return _context.PackagedUnits
+            //       .OrderByDescending(p => p.Id)
+            //       .Select(p => p.Id)
+            //       .FirstOrDefault();
         }
 
     }

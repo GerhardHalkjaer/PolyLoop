@@ -49,22 +49,45 @@ namespace Services
 
         #endregion
 
+        public async Task<int> GetLastIdAsync()
+        {
+            string getId = apiString + @"/api/PackagedUnit/LastId";
+
+            return await _httpClient.GetFromJsonAsync<int>(getId);
+        }
+
+
         #region Post
 
-        public async Task<HttpResponseMessage> PostPackagedUnitAsync( PackagedUnit inPU)
+        public async Task<int?> PostPackagedUnitAsync(PackagedUnit inPU)
         {
             string path = apiString + "/api/PackagedUnit";
 
             string jsonData = JsonSerializer.Serialize(inPU);
-
             StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await _httpClient.PostAsync(path, content);
 
-            return response;
+            if (response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
 
+                // ✅ If API returns just the ID as a number like: 123
+                if (int.TryParse(responseBody, out int id))
+                {
+                    return id;
+                }
+
+                // Assuming the API returns a JSON object like { "id": 123 }
+                using JsonDocument doc = JsonDocument.Parse(responseBody);
+                if (doc.RootElement.TryGetProperty("id", out JsonElement idElement))
+                {
+                    return idElement.GetInt32();
+                }
+            }
+
+            return null; // or throw exception / handle error as needed
         }
-
 
         #endregion
 

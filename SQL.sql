@@ -42,7 +42,7 @@ SpecificTypeId int NOT NULL,
 PackagingId int NOT NULL,
 "Weight" int NOT NULL,
 ImagePath nvarchar(500),
-UserPacking int,
+UserPackingId int,
 StartDate DateTime2 NOT NULL,
 ProcessedDate DateTime2
 CONSTRAINT PK_PackagedUnits_Id PRIMARY KEY(Id))
@@ -69,8 +69,8 @@ ALTER TABLE PackagedUnits
 	ADD CONSTRAINT FK_PackagingId FOREIGN KEY (PackagingId)
 	REFERENCES Packagings(Id)
 ALTER TABLE PackagedUnits
-	ADD CONSTRAINT FK_UserPackingId FOREIGN KEY (UserPacking)
-	REFERENCES Packagings(Id)
+	ADD CONSTRAINT FK_UserPackingId FOREIGN KEY (UserPackingId)
+	REFERENCES Users(Id)
 GO
 
 INSERT INTO Packagings ("Name",IconPath,PackagingWeight)
@@ -284,5 +284,10 @@ VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PC/ABS Regrind','
 
 INSERT INTO SpecificTypes (MaterialTypeId,"Name",IconPath)
 VALUES ((SELECT Id FROM MaterialTypes WHERE "Name" = 'ANDRE'),'PSU OC','Materialetype/Specific/Type11.jpg')
+
+GO
+
+INSERT INTO Users (UserName,UserPassword,Salt,AccessLevel)
+VALUES ('temp','nopass','nosalt',1)
 
 GO

@@ -30,6 +30,13 @@ namespace PolyLoopApi.Controllers
             return result;
         }
 
+        [HttpGet("lastid")]
+        public ActionResult<int> GetLastId()
+        {
+            int lastId = _packagedUnitRepo.GetLastId();
+            return Ok(lastId);
+        }
+
         [HttpPost]
         public ActionResult Post([FromBody] PackagedUnit item)
         {
@@ -37,9 +44,9 @@ namespace PolyLoopApi.Controllers
                 return BadRequest("invalid data.");
             }
 
-            _packagedUnitRepo.SaveNew(item);
-
-            return CreatedAtAction(nameof(GetById), new {id = item.Id},item);
+            int newId = _packagedUnitRepo.SaveNew(item);
+            return Ok(newId);
+            //return CreatedAtAction(nameof(GetById), new {id = item.Id},item);
 
         } 
 
