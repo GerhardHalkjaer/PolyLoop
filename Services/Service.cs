@@ -91,7 +91,13 @@ namespace Services
 
         #endregion
 
+        public async Task PostPackagedUnitUpdateAsync(PackagedUnit inPU)
+        {
+            string path = apiString + "/api/PackagedUnit/update";
 
+            var response = await _httpClient.PostAsJsonAsync(path, inPU);
+            response.EnsureSuccessStatusCode(); // throws if not 200-299
+        }
 
 
         //private async Task<T?> GetDataAsync<T>(string url)

@@ -202,7 +202,7 @@
         // put filename in Biz.packagedUnit
         Biz.packagedUnit.ImagePath = fileName;
 
-        // await myServ.PostPackagedUnitUpdateAsync(Biz.packagedUnit);
+        await myServ.PostPackagedUnitUpdateAsync(Biz.packagedUnit);
 
         // Specify a path to save the image
         string filePath = Path.Combine($@"{oneDrivePath}\PolyLoopImg", fileName);

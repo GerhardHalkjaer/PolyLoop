@@ -145,10 +145,38 @@ namespace DataAccess
 
             string sql = "UPDATE PackagedUnits SET ImagePath=@ImagePath WHERE Id = @Id";
 
+            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            {
+                SqlCommand cmd = new SqlCommand(sql, con);
+
+                try
+                {
+                    con.Open();
 
 
+                    cmd.Parameters.AddWithValue("@ImagePath", type.ImagePath);
+                    cmd.Parameters.AddWithValue("@Id", type.Id);
 
-            return true;
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+
+                //TODO
+
+            }
+
         }
 
 
