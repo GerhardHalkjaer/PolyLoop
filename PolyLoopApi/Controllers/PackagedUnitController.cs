@@ -48,9 +48,29 @@ namespace PolyLoopApi.Controllers
             return Ok(newId);
             //return CreatedAtAction(nameof(GetById), new {id = item.Id},item);
 
-        } 
+        }
+
+        [HttpPost("update")]
+        public ActionResult Update([FromBody] PackagedUnit item)
+        {
+            if (item == null || item.Id <= 0)
+            {
+                return BadRequest("invalid data.");
+            }
+
+            bool result = _packagedUnitRepo.Update(item);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
 
-        //TODO SAVE NEW
+
+
     }
 }

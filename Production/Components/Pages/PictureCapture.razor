@@ -193,14 +193,19 @@
         // Decode the base64 string into bytes
         byte[] imageBytes = Convert.FromBase64String(base64);
 
+        // Save the image to a file
+        await SavePackage();
+
         // File name
         string fileName = $"ID_{Biz.packagedUnit.Id}_image_{DateTime.Now.Ticks}.png";
 
-        // Specify a path to save the image
-        string filePath = Path.Combine($@"{oneDrivePath}\PolyLoopImg", fileName);
-
         // put filename in Biz.packagedUnit
         Biz.packagedUnit.ImagePath = fileName;
+
+        // await myServ.PostPackagedUnitUpdateAsync(Biz.packagedUnit);
+
+        // Specify a path to save the image
+        string filePath = Path.Combine($@"{oneDrivePath}\PolyLoopImg", fileName);
 
         // Write the bytes to a file
         await File.WriteAllBytesAsync(filePath, imageBytes);
@@ -211,6 +216,13 @@
         //TODO: change to oneDrive location.
 
     }
+
+    public async Task SavePackage()
+    {
+        Biz.packagedUnit.UserPacking = 1;
+        Biz.packagedUnit.Id = await myServ.PostPackagedUnitAsync(Biz.packagedUnit) ?? throw new Exception("Failed to get ID from API.");
+    }
+
 
     /// <summary>
     /// used to request camera access from the browser

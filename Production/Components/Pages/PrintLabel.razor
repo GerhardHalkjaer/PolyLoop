@@ -48,7 +48,7 @@
     {
         //TODO: check if Biz object has been filled out.
 
-        await SavePackage(); // Save the package to the database
+       // await SavePackage(); // Save the package to the database
 
         await LabelPrint();
 
@@ -60,14 +60,14 @@
 
     
 
-    public async Task SavePackage()
-    {
-        Biz.packagedUnit.UserPacking = 1;
-        Biz.packagedUnit.Id = await myServ.PostPackagedUnitAsync(Biz.packagedUnit) ?? throw new Exception("Failed to get ID from API.");
+    // public async Task SavePackage()
+    // {
+    //     Biz.packagedUnit.UserPacking = 1;
+    //     Biz.packagedUnit.Id = await myServ.PostPackagedUnitAsync(Biz.packagedUnit) ?? throw new Exception("Failed to get ID from API.");
 
 
 
-    }
+    // }
 
     public async Task LabelPrint()
     {

@@ -90,6 +90,8 @@ namespace DataAccess
         }
 
 
+
+
         /// <summary>
         /// save new packaged unit to the db
         /// </summary>
@@ -97,7 +99,7 @@ namespace DataAccess
         /// <returns>int Id</returns>
         public int SaveNew(PackagedUnit type)
         {
-            //TODO: [StartDate]
+            
             string sql = "INSERT INTO PackagedUnits (ImagePath, Weight, StartDate, PackagingId, SpecificTypeId, UserPackingId) " +
                 "OUTPUT INSERTED.Id " +
                 "VALUES (@ImagePath, @Weight, @StartDate, @PackagingId, @SpecificTypeId, @UserPackingId);";
@@ -136,6 +138,20 @@ namespace DataAccess
 
             }
         }
+
+        public bool Update(PackagedUnit type)
+        {
+            //TODO
+
+            string sql = "UPDATE PackagedUnits SET ImagePath=@ImagePath WHERE Id = @Id";
+
+
+
+
+            return true;
+        }
+
+
         /// <summary>
         /// Get the last Id from the PackagedUnits table
         /// </summary>
