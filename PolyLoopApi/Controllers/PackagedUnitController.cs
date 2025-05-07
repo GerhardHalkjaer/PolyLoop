@@ -20,7 +20,7 @@ namespace PolyLoopApi.Controllers
         public ActionResult<List<PackagedUnit>> GetAll()
         {
             List<PackagedUnit> result = _packagedUnitRepo.GetAll();
-            return result;
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

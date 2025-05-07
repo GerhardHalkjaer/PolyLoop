@@ -7,6 +7,7 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JS
 @using System.Diagnostics
+@using Microsoft.AspNetCore.Components.Forms
 
 
 @* <button @onclick="StartCameras">Start Cameras</button>
@@ -24,6 +25,14 @@
 </div>
 
 
+<label form="weightlabel">Vægt</label>
+    @* <input id="unitValue" type="number" @bind-value="unitValue" @bind-value:event="oninput" @onkeydown="HandleKeyDown" class="form-control" /> *@
+<input id="unitValue"
+       type="number"
+       @bind-value="unitValue"
+       @bind-value:event="oninput"
+       class="form-control"
+       @onkeydown="HandleKeyDown"/>
 
 @code {
 
@@ -32,6 +41,8 @@
     private bool _started = false;
     private string[] videoIds = { "video1", "video2" };
     private string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
+    private int unitValue;
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -71,7 +82,7 @@
 
 
         await SendToServer(0, img1);
-      //  await SendToServer(1, img2);
+        //  await SendToServer(1, img2);
 
 
 
@@ -80,10 +91,30 @@
         //TODO:
 
 
-        Nav.NavigateTo("/PrintLabel");
+
 
 
     }
+
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SubmitValueAsync();
+        }
+    }
+
+    private  Task SubmitValueAsync()
+    {
+
+        //TODO
+        Biz.packagedUnit.weight = unitValue - Biz.packagedUnit.Packaging.PackagingWeight;
+        Nav.NavigateTo("/PrintLabel");
+        // your logic here...
+        return Task.CompletedTask;
+    }
+
 
     /// <summary>
     /// sets the processed date of the packaged unit to now.

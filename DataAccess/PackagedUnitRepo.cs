@@ -59,8 +59,8 @@ namespace DataAccess
                         packagedUnit.weight = (int)dataReader["Weight"];
                         packagedUnit.Packaging = packaging;
                         packagedUnit.SpecificType = specificType;
-                        packagedUnit.ProcessedDate = DateTime.Parse(dataReader["ProcessedDate"].ToString());
-                        packagedUnit.UserPacking = (int)dataReader["UserPacking"]; //TODO: change to make a user object
+                        packagedUnit.ProcessedDate = DateTime.Parse(dataReader["StartDate"].ToString());
+                        packagedUnit.UserPacking = (int)dataReader["UserPackingId"]; //TODO: change to make a user object
 
                         packagedUnits.Add(packagedUnit);
 

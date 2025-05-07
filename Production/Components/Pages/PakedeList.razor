@@ -1,0 +1,56 @@
+﻿@page "/PakedeList"
+@using Services
+@using Entities
+@inject Service myServ
+@inject IBIZ Biz
+@rendermode InteractiveServer
+
+@if (units == null || units.Count == 0)
+{
+    <p>No units found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>MaterialeType</th> <!-- Replace with actual properties -->
+                <th>SpecificType</th>
+                <th>Embllage</th>
+                <th>Vægt</th>
+                <th>Dato</th>
+                <th>Billede</th>
+                <!-- Add more columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var unit in units)
+            {
+                <tr>
+                    <td>@unit.Id</td>
+                    <td>@unit.SpecificType.MatType.Name</td> <!-- Replace with real property -->
+                    <td>@unit.SpecificType.Name</td> <!-- Replace with real property -->
+                    <td>@unit.Packaging.Name</td>
+                    <td>@unit.weight</td>
+                    <td>@unit.ProcessedDate.ToString("yyyy-MM-dd")</td>
+                    <td><img src="@Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", unit.ImagePath)" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<PackagedUnit> units;
+
+    protected override async Task OnInitializedAsync()
+    {
+        units = await myServ.GetAllPackagedUnitAsync();
+        // You can also filter or sort the units here if needed
+    }
+
+
+
+}
