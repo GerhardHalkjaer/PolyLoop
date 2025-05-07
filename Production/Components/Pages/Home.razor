@@ -34,6 +34,7 @@
     protected override async Task OnInitializedAsync()
     {
         materialTypes = await myServ.GetAllMaterialTypesAsync();
+        Biz.packagedUnit = new PackagedUnit(); // Reset the object after printing
     }
 
     private void SetProperty(int Inid)
