@@ -70,23 +70,10 @@
         await RequestCameras();
         await StartCameras();
 
-        string img1 = await CaptureImg(0);
-        string img2 = await CaptureImg(1);
+        
 
         List<string> listID = await GetVidpids();
 
-
-        await SetProcessDate();
-
-
-
-
-        await SendToServer(0, img1);
-        //  await SendToServer(1, img2);
-
-
-
-        await StopCameras();
 
         //TODO:
 
@@ -105,14 +92,27 @@
         }
     }
 
-    private  Task SubmitValueAsync()
+    private async Task SubmitValueAsync()
     {
 
         //TODO
         Biz.packagedUnit.weight = unitValue - Biz.packagedUnit.Packaging.PackagingWeight;
+
+        string img1 = await CaptureImg(0);
+        string img2 = await CaptureImg(1);
+        await SetProcessDate();
+
+        await SendToServer(0, img1);
+        //  await SendToServer(1, img2);
+
+
+
+        await StopCameras();
+
+
         Nav.NavigateTo("/PrintLabel");
         // your logic here...
-        return Task.CompletedTask;
+        //return Task.CompletedTask;
     }
 
 
