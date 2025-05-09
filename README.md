@@ -23,9 +23,8 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 
 ## 🛠️ Technologies Used
 
-- .NET 8 / .NET 7
+- .NET 8
 - Blazor Server
-- Entity Framework Core
 - Azure OneDrive API
 - OCR library (e.g., Tesseract or IronOCR)
 - QR Code generation (e.g., QRCoder)
@@ -42,6 +41,12 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 - SQL Server (or your configured DB)
 - Brother QL-820NWB printer driver
 - OneDrive credentials for image storage
+
+### TODO
+-OCR module needs to be installed
+-images on package List isnt being showed
+-remake so the page works on android tablets
+
 
 ### Installation
 
