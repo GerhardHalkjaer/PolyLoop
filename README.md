@@ -43,10 +43,10 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 - OneDrive credentials for image storage
 
 ### TODO
--OCR module needs to be installed
--images on package List isnt being showed
--remake so the page works on android tablets
-
+- OCR module needs to be installed.
+- Images on package List isnt being showed.
+- Remake so the pages works on android tablets.
+- add so packeges can be marked as shipped so the list isnt showing them, and make another list that shows shipped so that they can see what they have standing and what has been shipped.
 
 ### Installation
 
