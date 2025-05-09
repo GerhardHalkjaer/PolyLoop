@@ -52,6 +52,6 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 
 ```bash
 git clone https://github.com/GerhardHalkjaer/PolyLoop.git
-cd polyloop-packaging-assist
+cd polyloop
 dotnet restore
 dotnet run
