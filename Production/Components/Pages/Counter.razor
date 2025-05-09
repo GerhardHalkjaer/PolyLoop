@@ -1,19 +1,57 @@
 ﻿@page "/counter"
+@using Services
+@using Entities
+@using Tesseract
+@inject Service myServ
+@inject IBIZ Biz
+@using System.Diagnostics
+
+@inject IWebHostEnvironment Env
 @rendermode InteractiveServer
 
-<PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<button class="btn btn-primary mt-2" @onclick="OCR">Start OCR</button>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+<textarea class="form-control" rows="6">@line</textarea>
+
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
+   
+
+    public string line = string.Empty;
+
+    public void OCR()
     {
-        currentCount++;
+        try
+        {
+
+            string imagePath = @"C:\codeFolder\ID_5022.png";
+
+            TesseractEngine ocrEngine = new TesseractEngine(@"./tessdata", "eng", EngineMode.Default);
+            ocrEngine.DefaultPageSegMode = PageSegMode.SingleLine;
+           
+            ocrEngine.SetVariable("tessedit_char_whitelist", "0123456789");
+            using Pix img = Pix.LoadFromFile(imagePath);
+            Pix grayImg = img.ConvertRGBToGray(0.2989f, 0.587f, 0.114f);
+            // using var binarizedImg = grayImg.BinarizeOtsuAdaptiveThreshold(200, 200, 0, 0, 0.15f);
+            using Page page = ocrEngine.Process(grayImg);
+            string text = page.GetText();
+            line = text;
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            
+            line = $"Error: {ex.Message}";
+        }
+
     }
+
+    
+
+
 }
