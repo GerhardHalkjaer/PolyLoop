@@ -30,6 +30,7 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 - QR Code generation (e.g., QRCoder)
 - Brother QL-820NWB printer integration
 - SQL Server / SQLite
+- JaveScript
 
 ## 🧑‍💻 Getting Started
 
