@@ -29,13 +29,20 @@
 
     [Inject] NavigationManager Nav { get; set; } // Inject navigation service
 
-
+    /// <summary>
+    /// Initializes the component and retrieves all packaging types from the service.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         packaging = await myServ.GetAllPackagingsAsync();
     }
 
-
+    /// <summary>
+    /// Sets the property of the PackagedUnit object to the selected Packaging
+    /// </summary>
+    /// <param name="Inid">The ID of the selected Packaging</param>
+    /// <exception cref="InvalidOperationException"></exception>
     private void SetProperty(int Inid)
     {
         var pack = packaging.FirstOrDefault(x => x.Id == Inid);
@@ -50,6 +57,10 @@
         }
     }
 
+    /// <summary>
+    ///  Handles the click event and sets the property for packaging.
+    /// </summary>
+    /// <param name="id">The ID of the Selected packaging</param>
     private void HandleClick(int id)
     {
         SetProperty(id);  // Set the property first

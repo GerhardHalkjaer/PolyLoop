@@ -10,23 +10,15 @@
 @using Microsoft.AspNetCore.Components.Forms
 
 
-@* <button @onclick="StartCameras">Start Cameras</button>
- *
- * <button @onclick="RequestCameras">Grant Camera Access</button>
- *@
-
 <div>
     <video id="video1" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
-   @*  <button @onclick="() => CaptureAndSend(0)">Capture Camera 1</button> *@
 </div>
 <div>
     <video id="video2" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
-   @*  <button @onclick="() => CaptureAndSend(1)">Capture Camera 2</button> *@
 </div>
 
 
 <label form="weightlabel">Vægt</label>
-    @* <input id="unitValue" type="number" @bind-value="unitValue" @bind-value:event="oninput" @onkeydown="HandleKeyDown" class="form-control" /> *@
 <input id="unitValue"
        type="number"
        @bind-value="unitValue"
@@ -43,7 +35,11 @@
     private string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
     private int unitValue;
 
-
+    /// <summary>
+    /// This method is called after the component has rendered.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !_started)
@@ -66,24 +62,20 @@
         //Followed by stopping the cameras.
         //then move on the label printing.
 
-
         await RequestCameras();
         await StartCameras();
 
-        
-
         List<string> listID = await GetVidpids();
-
 
         //TODO:
 
-
-
-
-
     }
 
-
+    /// <summary>
+    /// Handles the key down event for the input field and if enter is pressed act on it.
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
@@ -92,6 +84,10 @@
         }
     }
 
+    /// <summary>
+    /// Submits the value entered in the input field and subtract the packagning weight from it and captures images from both cameras.
+    /// </summary>
+    /// <returns></returns>
     private async Task SubmitValueAsync()
     {
 
@@ -105,13 +101,11 @@
         await SendToServer(0, img1);
         //  await SendToServer(1, img2);
 
-
+        //since OCR isnt implemented yet, we will just use the img from the 1nst camera
 
         await StopCameras();
 
-
         Nav.NavigateTo("/PrintLabel");
-        // your logic here...
         //return Task.CompletedTask;
     }
 
@@ -133,6 +127,8 @@
     {
         List<string> listOfVidIDs = await JS.InvokeAsync<List<string>>("sendVidPids");
 
+        //TODO: change use cookies to save the id's of the cameras and their names and what they are used for.
+
         return listOfVidIDs;
     }
 
@@ -147,7 +143,7 @@
     }
 
     /// <summary>
-    /// Captures an image from the specified camera and sends it to the server.
+    /// Captures an image from the specified camera using javascript and sends it to the server.
     /// </summary>
     /// <param name="camIndex">The index of the camera (0 for first camera, 1 for second camera).</param>
     /// <returns></returns>
@@ -201,11 +197,10 @@
 
 
     /// <summary>
-    /// used to send the image to the server
-    /// TODO: not yet implemented
+    /// used to send convert a base64 string to an image and save it on onedrive
     /// </summary>
-    /// <param name="camIndex"></param>
-    /// <param name="base64Image"></param>
+    /// <param name="camIndex">the ID of the camera</param>
+    /// <param name="base64Image">a base64 string reprencenting the img</param>
     /// <returns></returns>
     private async Task SendToServer(int camIndex, string base64Image)
     {
@@ -232,7 +227,6 @@
 
         // put filename in Biz.packagedUnit
         Biz.packagedUnit.ImagePath = fileName;
-
         await myServ.PostPackagedUnitUpdateAsync(Biz.packagedUnit);
 
         // Specify a path to save the image
@@ -240,14 +234,18 @@
 
         // Write the bytes to a file
         await File.WriteAllBytesAsync(filePath, imageBytes);
-
         Console.WriteLine($"Image saved to: {filePath}");
 
 
-        //TODO: change to oneDrive location.
+        //TODO: change to oneDrive location maybe azure onedrive API.
 
     }
 
+    /// <summary>
+    /// Saves the packaged unit to the Database via Service and updates its ID that is returned from the database.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task SavePackage()
     {
         Biz.packagedUnit.UserPacking = 1;

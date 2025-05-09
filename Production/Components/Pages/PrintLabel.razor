@@ -28,13 +28,15 @@
     // try a QrCode size of 40mm x 40mm = 472px x 472px ?
 
 
-
-
     [Inject] NavigationManager Nav { get; set; } // Inject navigation service
     private bool _started = false;
 
 
-
+    /// <summary>
+    /// This method is called after the component has rendered.
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !_started)
@@ -48,27 +50,18 @@
     {
         //TODO: check if Biz object has been filled out.
 
-       // await SavePackage(); // Save the package to the database
+        // await SavePackage(); // Save the package to the database
 
         await LabelPrint();
 
-       
-
         Nav.NavigateTo("/");
-
     }
 
-    
 
-    // public async Task SavePackage()
-    // {
-    //     Biz.packagedUnit.UserPacking = 1;
-    //     Biz.packagedUnit.Id = await myServ.PostPackagedUnitAsync(Biz.packagedUnit) ?? throw new Exception("Failed to get ID from API.");
-
-
-
-    // }
-
+    /// <summary>
+    /// QRcode generation and printing
+    /// </summary>
+    /// <returns></returns>
     public async Task LabelPrint()
     {
 
@@ -85,7 +78,7 @@
                 QRCodeData data = qr.CreateQrCode($"ID:{Biz.packagedUnit.Id};NAME:{Biz.packagedUnit.SpecificType.Name};"
                 + $"KG:{Biz.packagedUnit.weight};Date:{Biz.packagedUnit.ProcessedDate}", QRCodeGenerator.ECCLevel.Q);
                 Bitmap qrImg = new QRCode(data).GetGraphic(10);
-                
+
                 int qrX = 10;
                 int qrY = 10;
                 int qrSize = 150;
@@ -103,17 +96,16 @@
 
                 // Reset transform for future drawing (optional)
                 g.ResetTransform();
-
-               
             }
-
         };
-
         printDoc.Print();
-
     }
 
-   
+    /// <summary>
+    /// Generates a QR code image from the given text.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
     public byte[] GenerateQrCode(string text)
     {
         QRCodeGenerator qrGenerator = new QRCodeGenerator(); // initializes the QR code generator

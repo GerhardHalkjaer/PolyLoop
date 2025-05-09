@@ -37,6 +37,10 @@
 
     [Inject] NavigationManager Nav { get; set; } // Inject navigation service
 
+    /// <summary>
+    /// Initializes the component and retrieves all specific material types from the service.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         if (Biz.packagedUnit.SpecificType.MatType.Id == -1)
@@ -49,16 +53,19 @@
         {
             specificTypes = specificTypes.FindAll(x => x.MatType.Id == Biz.packagedUnit.SpecificType.MatType.Id);
         }
-        
     }
 
+    /// <summary>
+    /// Sets the property of the PackagedUnit object to the selected specific type.
+    /// </summary>
+    /// <param name="Inid">The ID of the selected specific type</param>
+    /// <exception cref="InvalidOperationException"></exception>
     private void SetProperty(int Inid)
     {
         var spec = specificTypes.FirstOrDefault(x => x.Id == Inid);
         if (spec != null)
         {
             Biz.packagedUnit.SpecificType = spec;
-
         }
         else
         {
@@ -66,6 +73,10 @@
         }
     }
 
+    /// <summary>
+    /// handle click event for selected specific type
+    /// </summary>
+    /// <param name="id">The ID of the selected Plastic specific type</param>
     private void HandleClick(int id)
     {
         SetProperty(id);  // Set the property first

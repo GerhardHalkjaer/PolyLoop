@@ -30,13 +30,23 @@
 @code {
 
     private List<MaterialType> materialTypes;
+    [Inject] NavigationManager Nav { get; set; } // Inject navigation service
 
+    /// <summary>
+    /// Initializes the component and retrieves all material types from the service.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         materialTypes = await myServ.GetAllMaterialTypesAsync();
         Biz.packagedUnit = new PackagedUnit(); // Reset the object after printing
     }
 
+    /// <summary>
+    /// Sets the property of the PackagedUnit object to the selected MaterialType
+    /// </summary>
+    /// <param name="Inid">The ID of the selected Plastic material type</param>
+    /// <exception cref="InvalidOperationException"></exception>
     private void SetProperty(int Inid)
     {
         var mat = materialTypes.FirstOrDefault(x => x.Id == Inid);
@@ -52,9 +62,10 @@
 
     }
 
-
-    [Inject] NavigationManager Nav { get; set; } // Inject navigation service
-
+    /// <summary>
+    /// handle click event for selected material type
+    /// </summary>
+    /// <param name="id">The ID of the selected Plastic Material type</param>
     private void HandleClick(int id)
     {
         SetProperty(id);  // Set the property first
