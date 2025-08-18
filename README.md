@@ -30,7 +30,7 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 - QR Code generation (e.g., QRCoder)
 - Brother QL-820NWB printer integration
 - SQL Server / SQLite
-- JaveScript
+- JavaScript
 
 ## 🧑‍💻 Getting Started
 
@@ -39,22 +39,23 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 - .NET SDK 8.x
 - Visual Studio 2022+
 - Camera support on local device or connected hardware
-- SQL Server (or your configured DB)
+- SQL Server
 - Brother QL-820NWB printer driver
 - OneDrive credentials for image storage
 
 ### TODO
 - OCR module needs to be installed.
-- Images on package List isnt being showed.
+- Images on package List isn't being showed.
 - Remake so the pages works on android tablets.
-- add so packeges can be marked as shipped so the list isnt showing them, and make another list that shows shipped so that they can see what they have standing and what has been shipped.
+- OneDrive integration
+- add so packeges can be marked as shipped so the list isn't showing them, and make another list that shows shipped so that they can see what they have standing and what has been shipped.
 
 ### System Order
 - Production uses Services to communicate with the PolyLoopApi.
 - Services uses DataAccess to communicate with the DB
 - DataAccess communicate with the DB
-- Managment currently isnt used.
--they all know uses Entities 
+- Management currently isn't used.
+- they all know Entities 
  
 ### Installation
 

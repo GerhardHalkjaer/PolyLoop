@@ -15,6 +15,8 @@ namespace Entities
         public string ImagePath { get; set; }
         public DateTime ProcessedDate { get; set; }
 
+        public bool Shipped { get; set; }
+
         public int UserPacking { get; set; }
 
         public PackagedUnit()
@@ -23,6 +25,7 @@ namespace Entities
             SpecificType = new SpecificType();
             Packaging = new Packaging();
             ProcessedDate = new DateTime();
+            Shipped = false;
         }
 
         public PackagedUnit(PackagedUnit InpackagedUnit)
@@ -34,6 +37,7 @@ namespace Entities
             ImagePath = InpackagedUnit.ImagePath;
             ProcessedDate = InpackagedUnit.ProcessedDate;
             UserPacking = InpackagedUnit.UserPacking;
+            Shipped = InpackagedUnit.Shipped;
         }
     }
 }

@@ -15,13 +15,13 @@ else
         <thead>
             <tr>
                 <th>Id</th>
-                <th>MaterialeType</th> <!-- Replace with actual properties -->
+                <th>MaterialeType</th> 
                 <th>SpecificType</th>
                 <th>Embllage</th>
                 <th>Vægt</th>
                 <th>Dato</th>
                 <th>Billede</th>
-                <!-- Add more columns as needed -->
+                
             </tr>
         </thead>
         <tbody>
@@ -29,8 +29,8 @@ else
             {
                 <tr>
                     <td>@unit.Id</td>
-                    <td>@unit.SpecificType.MatType.Name</td> <!-- Replace with real property -->
-                    <td>@unit.SpecificType.Name</td> <!-- Replace with real property -->
+                    <td>@unit.SpecificType.MatType.Name</td> 
+                    <td>@unit.SpecificType.Name</td> 
                     <td>@unit.Packaging.Name</td>
                     <td>@unit.weight</td>
                     <td>@unit.ProcessedDate.ToString("yyyy-MM-dd")</td>

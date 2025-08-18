@@ -61,6 +61,7 @@ namespace DataAccess
                         packagedUnit.SpecificType = specificType;
                         packagedUnit.ProcessedDate = DateTime.Parse(dataReader["StartDate"].ToString());
                         packagedUnit.UserPacking = (int)dataReader["UserPackingId"]; //TODO: change to make a user object
+                        packagedUnit.Shipped = (bool)dataReader["Shipped"];
 
                         packagedUnits.Add(packagedUnit);
 
@@ -178,6 +179,50 @@ namespace DataAccess
             }
 
         }
+
+        /// <summary>
+        /// update PackageUnit's shipped
+        /// </summary>
+        /// <param name="type">PackagedUnit</param>
+        /// <returns></returns>
+        public bool UpdateShipping(PackagedUnit type)
+        {
+            string sql = "UPDATE PackagedUnits SET Shipped=@Shipped WHERE Id = @Id";
+
+            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            {
+                SqlCommand cmd = new SqlCommand(sql, con);
+
+                try
+                {
+                    con.Open();
+
+                    cmd.Parameters.AddWithValue("@Shipped", type.Shipped);
+                    cmd.Parameters.AddWithValue("@Id", type.Id);
+
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+
+                //TODO
+
+            }
+        }
+
+
+
 
 
         /// <summary>

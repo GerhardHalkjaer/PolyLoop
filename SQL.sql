@@ -44,7 +44,8 @@ PackagingId int NOT NULL,
 ImagePath nvarchar(500),
 UserPackingId int,
 StartDate DateTime2 NOT NULL,
-ProcessedDate DateTime2
+ProcessedDate DateTime2,
+Shipped Bit
 CONSTRAINT PK_PackagedUnits_Id PRIMARY KEY(Id))
 GO
 
