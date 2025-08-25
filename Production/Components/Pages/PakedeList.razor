@@ -11,6 +11,11 @@
 }
 else
 {
+    <div class="mb-3">
+        <button class="btn btn-primary me-2" @onclick="ShowNotShipped">På lager</button>
+        <button class="btn btn-success" @onclick="ShowShipped">Sent</button>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
@@ -25,7 +30,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (PackagedUnit unit in units.Where(u => !u.Shipped))
+            @foreach (var unit in FilteredUnits)
             {
                 <tr>
                     <td>@unit.Id</td>
@@ -44,6 +49,15 @@ else
 @code {
 
     private List<PackagedUnit> units;
+
+    private bool showShipped = false;
+
+    private IEnumerable<PackagedUnit> FilteredUnits =>
+        showShipped ? units.Where(u => u.Shipped) : units.Where(u => !u.Shipped);
+
+    private void ShowShipped() => showShipped = true;
+    private void ShowNotShipped() => showShipped = false;
+
 
     protected override async Task OnInitializedAsync()
     {

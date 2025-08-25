@@ -1,19 +1,150 @@
 ﻿@page "/counter"
+@using Services
+@using Entities
+@inject Service myServ
+@inject IBIZ Biz
+@using Production.Model
 @rendermode InteractiveServer
+@inject IJSRuntime JS
+@using System.Diagnostics
+@using Microsoft.AspNetCore.Components.Forms
 
-<PageTitle>Counter</PageTitle>
+@implements IAsyncDisposable
 
-<h1>Counter</h1>
+<div class="camera-system-container">
+    <h3>Rear Camera</h3>
 
-<p role="status">Current count: @currentCount</p>
+    <div class="camera-controls mb-3">
+        <button class="btn btn-success" @onclick="StartCamera" disabled="@camerasRunning">📹 Start Camera</button>
+        <button class="btn btn-warning" @onclick="CaptureImage" disabled="@(!camerasRunning)">📸 Capture</button>
+        <button class="btn btn-danger" @onclick="StopCamera" disabled="@(!camerasRunning)">⏹️ Stop</button>
+    </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        <div class="alert alert-info">@statusMessage</div>
+    }
+
+    <video id="rearCamera" autoplay playsinline muted
+           style="width: 100%; max-width: 500px; border: 2px solid #007bff;"></video>
+
+    @if (capturedImage != null)
+    {
+        <div class="captured-images mt-4">
+            <h4>Captured Image:</h4>
+            <img src="@capturedImage.ImageData"
+                 style="max-width: 300px; border: 1px solid #ccc;" />
+            <div>
+                <small>@capturedImage.Width x @capturedImage.Height</small>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
-    private int currentCount = 0;
+    private bool camerasRunning = false;
+    private string statusMessage = "";
+    private CapturedImage? capturedImage;
 
-    private void IncrementCount()
+    private async Task StartCamera()
     {
-        currentCount++;
+        try
+        {
+            var result = await JS.InvokeAsync<CameraStartResult>(
+                "blazorCameraSystem.startRearCamera", "rearCamera");
+
+            if (result.Success)
+            {
+                camerasRunning = true;
+                statusMessage = "✅ Rear camera started";
+            }
+            else
+            {
+                statusMessage = $"❌ {result.Error}";
+            }
+        }
+        catch (Exception ex)
+        {
+            statusMessage = $"Error starting camera: {ex.Message}";
+        }
+    }
+
+    private async Task CaptureImage()
+    {
+        try
+        {
+            var result = await JS.InvokeAsync<CaptureResult>(
+                "blazorCameraSystem.captureImage", "rearCamera", 1.0);
+
+            if (result.Success)
+            {
+
+
+
+                capturedImage = new CapturedImage
+                {
+                    VideoId = result.VideoId,
+                    ImageData = result.ImageData,
+                    Width = result.Width,
+                    Height = result.Height,
+                    Timestamp = DateTime.Now
+                };
+                statusMessage = "✅ Image captured";
+            }
+            else
+            {
+                statusMessage = $"❌ {result.Error}";
+            }
+        }
+        catch (Exception ex)
+        {
+            statusMessage = $"Error capturing image: {ex.Message}";
+        }
+    }
+
+    private async Task StopCamera()
+    {
+        await JS.InvokeVoidAsync("blazorCameraSystem.stopCameras");
+        camerasRunning = false;
+        statusMessage = "✅ Camera stopped";
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (camerasRunning)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("blazorCameraSystem.stopCameras");
+            }
+            catch { }
+        }
+    }
+
+    // Helper classes for JS interop
+    public class CameraStartResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = "";
+        public string? Error { get; set; }
+    }
+
+    public class CaptureResult
+    {
+        public bool Success { get; set; }
+        public string ImageData { get; set; } = "";
+        public string VideoId { get; set; } = "";
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public string? Error { get; set; }
+    }
+
+    public class CapturedImage
+    {
+        public string VideoId { get; set; } = "";
+        public string ImageData { get; set; } = "";
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

@@ -87,8 +87,8 @@
 
 
                 // Rotate and draw text beside QR
-                g.TranslateTransform(170, 150); // Move origin to where text should appear
-                g.RotateTransform(-90); // Rotate counter-clockwise
+                g.TranslateTransform(20, 170); // Move origin to where text should appear
+               // g.RotateTransform(-90); // Rotate counter-clockwise
                 using Font font = new Font("Arial", 14, FontStyle.Bold);
                 g.DrawString($"{Biz.packagedUnit.Id}", font, Brushes.Black, 0, -20);
                 g.DrawString($"{Biz.packagedUnit.SpecificType.Name}", font, Brushes.Black, 0, 0);

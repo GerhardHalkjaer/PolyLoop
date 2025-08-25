@@ -12,7 +12,7 @@
             {
                 @foreach (Packaging item in packaging)
                 {
-                    <div class="card" style="width: 18rem;" @onclick="() => HandleClick(item.Id)">
+                    <div class="card col-3" @onclick="() => HandleClick(item.Id)">
 
                         <img class="card-img-top" src="/img/@item.IconPath" alt="Card image cap" onerror="this.onerror=null;this.src='/img/PH.png';" />
                         <div class="card-overlay">@item.Name</div>

@@ -11,11 +11,11 @@
 
 
 <div>
-    <video id="video1" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
+    <video id="rearCamera" autoplay playsinline muted crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
 </div>
-<div>
+@* <div>
     <video id="video2" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
-</div>
+</div> *@
 
 
 <label form="weightlabel">Vægt</label>
@@ -62,10 +62,11 @@
         //Followed by stopping the cameras.
         //then move on the label printing.
 
-        await RequestCameras();
+        //  await RequestCameras();
         await StartCameras();
+        await SubmitValueAsync();
 
-        List<string> listID = await GetVidpids();
+       // List<string> listID = await GetVidpids();
 
         //TODO:
 
@@ -139,7 +140,11 @@
     private async Task StartCameras()
     {
         //string[] videoIds = { "video1", "video2" };
-        await JS.InvokeVoidAsync("startCameras", (object)videoIds);
+        var result = await JS.InvokeAsync<CameraStartResult>(
+                "blazorCameraSystem.startRearCamera", "rearCamera");
+
+
+        //result can be used to see if cameras where started
     }
 
     /// <summary>
@@ -150,49 +155,27 @@
     private async Task<string> CaptureImg(int camIndex)
     {
 
-        Debug.WriteLine("starter");
-        string videoId = camIndex == 0 ? "video1" : "video2";
-        Debug.WriteLine(videoId);
         try
         {
-            Debug.WriteLine($"Attempting to capture image from: {videoId}");
-            string base64Image = await JS.InvokeAsync<string>("captureImage",videoId);
-            Debug.WriteLine($"Captured image (Base64 length: {base64Image?.Length ?? 0})");
+            var result = await JS.InvokeAsync<CaptureResult>(
+                "blazorCameraSystem.captureImage", "rearCamera", 1.0);
 
-            if (!string.IsNullOrEmpty(base64Image))
-            {
-                //await SendToServer(camIndex, base64Image);
-                //TODO: change so it doesnt send to server but return the img.
+            
 
-                return base64Image;
+                return result.ImageData;
 
-            }
-            else
-            {
-                Debug.WriteLine("No image captured.");
-                return null;
-            }
-        }
-        catch (TaskCanceledException ex)
-        {
-            Debug.WriteLine($"TaskCanceledException: {ex.Message}");
-            return null;
-        }
-        catch (JSException ex)
-        {
-            Debug.WriteLine($"JSException: {ex.Message}");
-            return null;
+            
+
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Unexpected error: {ex.Message}");
-            return null;
+            throw;
         }
     }
 
     private async Task StopCameras()
     {
-        await JS.InvokeVoidAsync("stopCameras");
+        await JS.InvokeVoidAsync("blazorCameraSystem.stopCameras");
     }
 
 
@@ -261,6 +244,26 @@
     private async Task RequestCameras()
     {
         await JS.InvokeVoidAsync("requestCameras");
+    }
+
+
+
+    // Helper classes for JS interop
+    public class CameraStartResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = "";
+        public string? Error { get; set; }
+    }
+
+    public class CaptureResult
+    {
+        public bool Success { get; set; }
+        public string ImageData { get; set; } = "";
+        public string VideoId { get; set; } = "";
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public string? Error { get; set; }
     }
 
 }
