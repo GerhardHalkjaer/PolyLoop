@@ -1,7 +1,7 @@
 using Production;
 using Production.Components;
 using Services;
-
+using Microsoft.AspNetCore.StaticFiles;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +43,23 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.MapGet("/localimage/{filename}", (string filename) =>
+{
+    var filePath = Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", filename);
+
+    if (!System.IO.File.Exists(filePath))
+        return Results.NotFound();
+
+    var provider = new FileExtensionContentTypeProvider();
+    if (!provider.TryGetContentType(filePath, out var contentType))
+    {
+        contentType = "application/octet-stream"; // fallback
+    }
+
+    return Results.File(filePath, contentType);
+});
+
 
 app.UseHttpsRedirection();
 

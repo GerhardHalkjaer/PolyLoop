@@ -10,30 +10,40 @@
 @using Microsoft.AspNetCore.Components.Forms
 
 
-<div>
-    <video id="rearCamera" autoplay playsinline muted crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
+<div class="Camera-container">
+
+    
+        <div>
+            <video id="rearCamera" autoplay playsinline muted crossorigin="anonymous"
+               style="display:@(camerasRunning ? "block" : "none")" class="video-container"></video>
+        </div>
+
+    <div class="camera-controls mb-3" style="display:@(camerasRunning ? "block" : "none")">
+            <button class="btn btn-danger camSnap" @onclick="CaptureImg">📸 Capture</button>
+    </div>
+    
+    <div style="display:@(_pictureTaken ? "block" : "none")">
+
+        <label form="weightlabel">Vægt</label>
+        <input id="unitValue"
+            type="number"
+            @bind-value="unitValue"
+            @bind-value:event="oninput"
+            class="form-control"
+            @onkeydown="HandleKeyDown" />
+
+    </div>
 </div>
-@* <div>
-    <video id="video2" autoplay playsinline crossorigin="anonymous" class="video-container" width="1280" height="960"></video>
-</div> *@
-
-
-<label form="weightlabel">Vægt</label>
-<input id="unitValue"
-       type="number"
-       @bind-value="unitValue"
-       @bind-value:event="oninput"
-       class="form-control"
-       @onkeydown="HandleKeyDown"/>
 
 @code {
 
     [Inject] NavigationManager Nav { get; set; } // Inject navigation service
 
     private bool _started = false;
-    private string[] videoIds = { "video1", "video2" };
     private string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
     private int unitValue;
+    private bool camerasRunning = false;
+    private bool _pictureTaken = false;
 
     /// <summary>
     /// This method is called after the component has rendered.
@@ -52,24 +62,7 @@
 
     private async Task InitializeProcess()
     {
-
-        //first request access to camesras, then start the cameras
-        //then snapshot with both cameras
-        //then get the id's of the cameras
-        //from the id's figure out what camera is for what TODO:figure out how to identify the cameras and save that info, maybe cookies?
-        //then the img thats for weight send that to the img to text convertion.
-        //then the img of the plastic itself send to server for saving.
-        //Followed by stopping the cameras.
-        //then move on the label printing.
-
-        //  await RequestCameras();
         await StartCameras();
-        await SubmitValueAsync();
-
-       // List<string> listID = await GetVidpids();
-
-        //TODO:
-
     }
 
     /// <summary>
@@ -95,19 +88,7 @@
         //TODO
         Biz.packagedUnit.weight = unitValue - Biz.packagedUnit.Packaging.PackagingWeight;
 
-        string img1 = await CaptureImg(0);
-        string img2 = await CaptureImg(1);
-        await SetProcessDate();
-
-        await SendToServer(0, img1);
-        //  await SendToServer(1, img2);
-
-        //since OCR isnt implemented yet, we will just use the img from the 1nst camera
-
-        await StopCameras();
-
-        Nav.NavigateTo("/PrintLabel");
-        //return Task.CompletedTask;
+        //  Nav.NavigateTo("/PrintLabel");    TODO: TURN ON AGAIN-------------------------------------------------------------------------------------------------
     }
 
 
@@ -124,14 +105,14 @@
     /// get the id's of the cameras
     /// </summary>
     /// <returns></returns>
-    private async Task<List<string>> GetVidpids()
-    {
-        List<string> listOfVidIDs = await JS.InvokeAsync<List<string>>("sendVidPids");
+    // private async Task<List<string>> GetVidpids()
+    // {
+    //     List<string> listOfVidIDs = await JS.InvokeAsync<List<string>>("sendVidPids");
 
-        //TODO: change use cookies to save the id's of the cameras and their names and what they are used for.
+    //     //TODO: change use cookies to save the id's of the cameras and their names and what they are used for.
 
-        return listOfVidIDs;
-    }
+    //     return listOfVidIDs;
+    // }
 
     /// <summary>
     /// Initializes and starts both cameras by invoking the JavaScript function.
@@ -139,9 +120,22 @@
     /// <returns></returns>
     private async Task StartCameras()
     {
-        //string[] videoIds = { "video1", "video2" };
-        var result = await JS.InvokeAsync<CameraStartResult>(
+        try
+        {
+            var result = await JS.InvokeAsync<CameraStartResult>(
                 "blazorCameraSystem.startRearCamera", "rearCamera");
+            if (result.Success)
+            {
+                camerasRunning = true;
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+
+            Debug.WriteLine($"Error starting camera: {ex.Message}");
+
+        }
 
 
         //result can be used to see if cameras where started
@@ -152,7 +146,7 @@
     /// </summary>
     /// <param name="camIndex">The index of the camera (0 for first camera, 1 for second camera).</param>
     /// <returns></returns>
-    private async Task<string> CaptureImg(int camIndex)
+    private async Task CaptureImg()
     {
 
         try
@@ -160,22 +154,28 @@
             var result = await JS.InvokeAsync<CaptureResult>(
                 "blazorCameraSystem.captureImage", "rearCamera", 1.0);
 
-            
+            await SetProcessDate();
 
-                return result.ImageData;
+            await SendToServer(0, result.ImageData);
 
-            
+            await StopCameras();
 
+            _pictureTaken = true;
+
+            //return result.ImageData;
         }
         catch (Exception ex)
         {
-            throw;
+            Debug.WriteLine($"Error capturing image: {ex.Message}");
         }
     }
 
     private async Task StopCameras()
     {
         await JS.InvokeVoidAsync("blazorCameraSystem.stopCameras");
+        camerasRunning = false;
+        StateHasChanged();
+
     }
 
 
@@ -218,10 +218,6 @@
         // Write the bytes to a file
         await File.WriteAllBytesAsync(filePath, imageBytes);
         Console.WriteLine($"Image saved to: {filePath}");
-
-
-        //TODO: change to oneDrive location maybe azure onedrive API.
-
     }
 
     /// <summary>

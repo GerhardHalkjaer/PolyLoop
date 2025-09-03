@@ -5,9 +5,11 @@
 @inject IBIZ Biz
 @rendermode InteractiveServer
 
-@* TODO add css *@
-<div class="SpecMatType">
-    <img src="/img/@Biz.packagedUnit.SpecificType.MatType.IconPath" />@Biz.packagedUnit.SpecificType.MatType.Name
+
+<div class="SpecMatType card col-2">
+    <img class="card-img-top" src="/img/@Biz.packagedUnit.SpecificType.MatType.IconPath" />
+    <div class="card-overlay">@Biz.packagedUnit.SpecificType.MatType.Name</div>
+    
 </div>
 
 

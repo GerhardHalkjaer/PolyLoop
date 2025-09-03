@@ -8,8 +8,9 @@
     align-items: center;
     justify-content: center;
     color: black;
-    font-size:2rem;
-    font-weight:bold;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
 }
 
 
@@ -18,7 +19,23 @@
 }
 
 .video-container {
-    width: 435px;
-    height: 326px;
-    display:none;
+    max-width: calc(100% - 160px);
+    width: 100%;
+    
+}
+
+.camSnap {
+    position: fixed;
+    top: 40%; /* vertical center */
+    right: 20px; /* stick to right edge */
+    transform: translateY(-50%); /* perfect centering */
+    width: 100px; /* size */
+    height: 160px;
+    border-radius: 50%; /* circle */
+    font-size: 28px; /* bigger icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 1000;
 }

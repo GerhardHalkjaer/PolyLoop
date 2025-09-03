@@ -39,7 +39,8 @@ else
                     <td>@unit.Packaging.Name</td>
                     <td>@unit.weight</td>
                     <td>@unit.ProcessedDate.ToString("yyyy-MM-dd")</td>
-                    <td><img src="@Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", unit.ImagePath)" /></td>
+                    <td><img src="@Path.Combine($@"/localimage", unit.ImagePath)" alt="Image of the plastic" /></td>
+                    @* <td><img src="@Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", unit.ImagePath)" alt="Image of the plastic"/></td> *@
                 </tr>
             }
         </tbody>

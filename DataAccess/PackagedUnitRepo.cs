@@ -62,6 +62,7 @@ namespace DataAccess
                         packagedUnit.ProcessedDate = DateTime.Parse(dataReader["StartDate"].ToString());
                         packagedUnit.UserPacking = (int)dataReader["UserPackingId"]; //TODO: change to make a user object
                         packagedUnit.Shipped = (bool)dataReader["Shipped"];
+                        
 
                         packagedUnits.Add(packagedUnit);
 
@@ -101,9 +102,9 @@ namespace DataAccess
         public int SaveNew(PackagedUnit type)
         {
             
-            string sql = "INSERT INTO PackagedUnits (ImagePath, Weight, StartDate, PackagingId, SpecificTypeId, UserPackingId) " +
+            string sql = "INSERT INTO PackagedUnits (ImagePath, Weight, StartDate, PackagingId, SpecificTypeId, UserPackingId, Shipped) " +
                 "OUTPUT INSERTED.Id " +
-                "VALUES (@ImagePath, @Weight, @StartDate, @PackagingId, @SpecificTypeId, @UserPackingId);";
+                "VALUES (@ImagePath, @Weight, @StartDate, @PackagingId, @SpecificTypeId, @UserPackingId, @Shipped);";
 
             using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
             {
@@ -120,6 +121,7 @@ namespace DataAccess
                     cmd.Parameters.AddWithValue("@PackagingId", type.Packaging.Id);
                     cmd.Parameters.AddWithValue("@SpecificTypeId", type.SpecificType.Id);
                     cmd.Parameters.AddWithValue("@UserPackingId", type.UserPacking);
+                    cmd.Parameters.AddWithValue("@Shipped", 0);
 
                     return (int)cmd.ExecuteScalar(); // gets the Id and returns it
 
