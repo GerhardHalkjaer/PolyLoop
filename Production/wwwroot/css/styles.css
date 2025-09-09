@@ -39,3 +39,57 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     z-index: 1000;
 }
+
+.imgThumbnail {
+    width: 128px;
+    height: 128px;
+    cursor: pointer;
+    object-fit: cover; /* keeps aspect ratio */
+}
+
+/* Overlay covers the whole screen */
+.overlay {
+    position: fixed;
+    inset: 0; /* shorthand for top:0; right:0; bottom:0; left:0 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7); /* black with 70% opacity */
+    z-index: 9999;
+}
+
+/* Container for the modal image */
+.modal {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display:block;
+    width:auto
+}
+
+/* Image styles */
+.modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Close button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+    .close-btn:hover {
+        background: #ddd;
+    }

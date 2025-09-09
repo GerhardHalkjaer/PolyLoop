@@ -69,6 +69,24 @@ namespace PolyLoopApi.Controllers
             }
         }
 
+        [HttpPost("updateShipping")]
+        public ActionResult UpdateShipping([FromBody] PackagedUnit item)
+        {
+            if (item == null || item.Id <= 0)
+            {
+                return BadRequest("invalid data.");
+            }
+
+            bool result = _packagedUnitRepo.UpdateShipping(item);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
 
 

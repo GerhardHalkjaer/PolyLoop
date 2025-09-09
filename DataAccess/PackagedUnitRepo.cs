@@ -146,7 +146,7 @@ namespace DataAccess
         {
             //TODO
 
-            string sql = "UPDATE PackagedUnits SET ImagePath=@ImagePath WHERE Id = @Id";
+            string sql = "UPDATE PackagedUnits SET ImagePath=@ImagePath,Weight=@Weight  WHERE Id = @Id";
 
             using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
             {
@@ -158,6 +158,7 @@ namespace DataAccess
 
 
                     cmd.Parameters.AddWithValue("@ImagePath", type.ImagePath);
+                    cmd.Parameters.AddWithValue("@Weight", type.weight);
                     cmd.Parameters.AddWithValue("@Id", type.Id);
 
                     cmd.ExecuteNonQuery();
@@ -189,6 +190,8 @@ namespace DataAccess
         /// <returns></returns>
         public bool UpdateShipping(PackagedUnit type)
         {
+            
+
             string sql = "UPDATE PackagedUnits SET Shipped=@Shipped WHERE Id = @Id";
 
             using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
@@ -223,7 +226,7 @@ namespace DataAccess
             }
         }
 
-
+        
 
 
 

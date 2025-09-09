@@ -88,7 +88,9 @@
         //TODO
         Biz.packagedUnit.weight = unitValue - Biz.packagedUnit.Packaging.PackagingWeight;
 
-        //  Nav.NavigateTo("/PrintLabel");    TODO: TURN ON AGAIN-------------------------------------------------------------------------------------------------
+        await myServ.PostPackagedUnitUpdateAsync(Biz.packagedUnit);
+
+        Nav.NavigateTo("/PrintLabel"); 
     }
 
 
@@ -101,18 +103,6 @@
         Biz.packagedUnit.ProcessedDate = DateTime.Now;
     }
 
-    /// <summary>
-    /// get the id's of the cameras
-    /// </summary>
-    /// <returns></returns>
-    // private async Task<List<string>> GetVidpids()
-    // {
-    //     List<string> listOfVidIDs = await JS.InvokeAsync<List<string>>("sendVidPids");
-
-    //     //TODO: change use cookies to save the id's of the cameras and their names and what they are used for.
-
-    //     return listOfVidIDs;
-    // }
 
     /// <summary>
     /// Initializes and starts both cameras by invoking the JavaScript function.
@@ -162,6 +152,8 @@
 
             _pictureTaken = true;
 
+            PlayCameraSound();
+
             //return result.ImageData;
         }
         catch (Exception ex)
@@ -169,6 +161,12 @@
             Debug.WriteLine($"Error capturing image: {ex.Message}");
         }
     }
+  
+    private async Task PlayCameraSound()
+    {
+        await JS.InvokeVoidAsync("playCameraSound");
+    }
+
 
     private async Task StopCameras()
     {

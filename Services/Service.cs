@@ -89,11 +89,19 @@ namespace Services
             return null; // or throw exception / handle error as needed
         }
 
-        #endregion
+        
 
         public async Task PostPackagedUnitUpdateAsync(PackagedUnit inPU)
         {
             string path = apiString + "/api/PackagedUnit/update";
+
+            var response = await _httpClient.PostAsJsonAsync(path, inPU);
+            response.EnsureSuccessStatusCode(); // throws if not 200-299
+        }
+
+        public async Task PostPackagedUnitShippingUpdateAsync(PackagedUnit inPU)
+        {
+            string path = apiString + "/api/PackagedUnit/updateShipping";
 
             var response = await _httpClient.PostAsJsonAsync(path, inPU);
             response.EnsureSuccessStatusCode(); // throws if not 200-299
@@ -104,5 +112,8 @@ namespace Services
         //{
         //    return await _httpClient.GetFromJsonAsync<T>(url);
         //}
+
+
+        #endregion
     }
 }

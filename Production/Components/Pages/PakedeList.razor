@@ -11,9 +11,10 @@
 }
 else
 {
-    <div class="mb-3">
+    <div class="mb-3 d-flex">
         <button class="btn btn-primary me-2" @onclick="ShowNotShipped">På lager</button>
-        <button class="btn btn-success" @onclick="ShowShipped">Sent</button>
+        <button class="btn btn-success me-2" @onclick="ShowShipped">Sent</button>
+        <button class="btn btn-primary ms-auto" @onclick="ProcessSelected">Process Selected</button>
     </div>
 
     <table class="table">
@@ -26,6 +27,7 @@ else
                 <th>Vægt</th>
                 <th>Dato</th>
                 <th>Billede</th>
+                <th>Send</th>
                 
             </tr>
         </thead>
@@ -39,13 +41,37 @@ else
                     <td>@unit.Packaging.Name</td>
                     <td>@unit.weight</td>
                     <td>@unit.ProcessedDate.ToString("yyyy-MM-dd")</td>
-                    <td><img src="@Path.Combine($@"/localimage", unit.ImagePath)" alt="Image of the plastic" /></td>
+                    @{
+                        string imgPath = Path.Combine($@"/localimage", unit.ImagePath);
+                    }
+                    <td><img src="@imgPath" alt="Image of the plastic" @onclick="() => ShowImage(imgPath)" class="imgThumbnail" /></td>
                     @* <td><img src="@Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", unit.ImagePath)" alt="Image of the plastic"/></td> *@
+
+                    <td>
+                        <input type="checkbox" @bind="SelectedItems[unit.Id]" />
+                    </td>
+
                 </tr>
             }
         </tbody>
     </table>
 }
+
+@if (SelectedImage != null)
+{
+    <div class="overlay" @onclick="CloseImage">
+        <div class="modal">
+            <img src="@SelectedImage" class="modal-image" />
+            
+            <button class="close-btn"
+                    @onclick:stopPropagation="true"
+                    @onclick="CloseImage">
+                ✖
+            </button>
+        </div>
+    </div>
+}
+
 
 @code {
 
@@ -59,13 +85,51 @@ else
     private void ShowShipped() => showShipped = true;
     private void ShowNotShipped() => showShipped = false;
 
+    private Dictionary<int, bool> SelectedItems = new();
+
+
+
 
     protected override async Task OnInitializedAsync()
     {
         units = await myServ.GetAllPackagedUnitAsync();
         // You can also filter or sort the units here if needed
+
+        // Initialize dictionary with false for all
+        SelectedItems = units.ToDictionary(p => p.Id, p => false);
+    }
+
+    private string? SelectedImage;
+
+    private void ShowImage(string img)
+    {
+        SelectedImage = img;
+
+    }
+
+    private void CloseImage()
+    {
+        SelectedImage = null;
     }
 
 
+    private void ProcessSelected()
+    {
+        List<PackagedUnit> selectedProducts = FilteredUnits
+            .Where(p => SelectedItems[p.Id])
+            .ToList();
+
+        //TODO update DB Shipped to true
+
+
+        foreach (PackagedUnit unit  in selectedProducts)
+        {
+            unit.Shipped = !unit.Shipped;
+
+            myServ.PostPackagedUnitShippingUpdateAsync(unit);
+        }
+
+
+    }
 
 }
