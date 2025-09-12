@@ -14,6 +14,9 @@ else
     <div class="mb-3 d-flex">
         <button class="btn btn-primary me-2" @onclick="ShowNotShipped">På lager</button>
         <button class="btn btn-success me-2" @onclick="ShowShipped">Sent</button>
+        <input type="text" @bind-value="searchId" @bind-value:event="oninput"
+         placeholder="Search by Id..." class="form-control w-auto ms-3" />
+
         <button class="btn btn-primary ms-auto" @onclick="ProcessSelected">Process Selected</button>
     </div>
 
@@ -79,8 +82,14 @@ else
 
     private bool showShipped = false;
 
+    private string searchId = "";
+
     private IEnumerable<PackagedUnit> FilteredUnits =>
-        showShipped ? units.Where(u => u.Shipped) : units.Where(u => !u.Shipped);
+    units.Where(u =>
+        (showShipped ? u.Shipped : !u.Shipped) &&
+        (string.IsNullOrWhiteSpace(searchId) ||
+         u.Id.ToString().Contains(searchId, StringComparison.OrdinalIgnoreCase))
+    );
 
     private void ShowShipped() => showShipped = true;
     private void ShowNotShipped() => showShipped = false;
