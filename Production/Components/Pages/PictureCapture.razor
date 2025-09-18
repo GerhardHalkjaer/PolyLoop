@@ -7,6 +7,7 @@
 @rendermode InteractiveServer
 @inject IJSRuntime JS
 @using System.Diagnostics
+@inject IConfiguration Configuration
 @using Microsoft.AspNetCore.Components.Forms
 
 
@@ -40,7 +41,7 @@
     [Inject] NavigationManager Nav { get; set; } // Inject navigation service
 
     private bool _started = false;
-    private string oneDrivePath = Environment.GetEnvironmentVariable("OneDrive");
+    private string oneDrivePath = "";
     private int unitValue;
     private bool camerasRunning = false;
     private bool _pictureTaken = false;
@@ -55,6 +56,10 @@
         if (firstRender && !_started)
         {
             _started = true;
+            oneDrivePath = Configuration["oneDriveLocation"];
+            // await JS.InvokeVoidAsync("logToConsole", $"{oneDrivePath}");
+            // await JS.InvokeVoidAsync("logToConsole", $"{System.IO.Directory.Exists(oneDrivePath)}");
+
             await InitializeProcess();
         }
 
@@ -62,6 +67,7 @@
 
     private async Task InitializeProcess()
     {
+        
         await StartCameras();
     }
 

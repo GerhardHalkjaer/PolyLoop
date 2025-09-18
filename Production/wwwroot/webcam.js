@@ -93,5 +93,9 @@ window.blazorCameraSystem = {
     }
 };
 
+window.logToConsole = (msg) => {
+    console.log(msg);
+};
+
 
 

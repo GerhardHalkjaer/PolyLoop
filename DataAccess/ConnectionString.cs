@@ -8,10 +8,10 @@ namespace DataAccess
 {
     public class ConnectionString
     {
-        public static string ConString { get; } = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PolyLoop;
-                                    Integrated Security=True;Connect Timeout=30;Encrypt=False;
-                                    Trust Server Certificate=False;Application Intent=ReadWrite;
-                                    Multi Subnet Failover=False";
+        public static string ConString { get; } = @"Server=CV-2025-0284\MSSQLSERVER01;
+                                                    Database=PolyLoop;
+                                                    User Id=api_user;Password=StrongPassword123!;
+                                                    TrustServerCertificate=True;";
 
     }
 }

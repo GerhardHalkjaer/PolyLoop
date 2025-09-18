@@ -46,8 +46,8 @@ if (!app.Environment.IsDevelopment())
 
 app.MapGet("/localimage/{filename}", (string filename) =>
 {
-    var filePath = Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", filename);
-
+    var filePath = Path.Combine($@"{builder.Configuration["oneDriveLocation"]}\PolyLoopImg", filename);
+    //var filePath = Path.Combine($@"{Environment.GetEnvironmentVariable("OneDrive")}\PolyLoopImg", filename);
     if (!System.IO.File.Exists(filePath))
         return Results.NotFound();
 

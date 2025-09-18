@@ -13,7 +13,7 @@ namespace Services
         public Service(HttpClient httpClient)
         {
             _httpClient = httpClient;
-             apiString = @"https://localhost:7299";
+             apiString = @"http://localhost:7299";
         }
 
 
