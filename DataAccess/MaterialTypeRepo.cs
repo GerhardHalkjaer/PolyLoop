@@ -6,7 +6,12 @@ namespace DataAccess
 {
     public class MaterialTypeRepo
     {
-        
+        string serverName = string.Empty;
+
+        public MaterialTypeRepo(string serverName)
+        {
+            this.serverName = serverName;
+        }
 
 
         public List<MaterialType> GetAll()
@@ -14,7 +19,7 @@ namespace DataAccess
             List<MaterialType> materialTypes = new List<MaterialType>();
             string query = "SELECT * FROM MaterialTypes";
            
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(query, con);
 

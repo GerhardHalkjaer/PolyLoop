@@ -10,12 +10,19 @@ namespace DataAccess
 {
     public class PackagingRepo
     {
+        string serverName = string.Empty;
+
+        public PackagingRepo(string serverName)
+        {
+            this.serverName = serverName;
+        }
+
         public List<Packaging> GetAll()
         {
             List<Packaging> packagings = new List<Packaging>();
             string query = "SELECT * FROM Packagings";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(query, con);
 

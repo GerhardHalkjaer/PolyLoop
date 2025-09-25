@@ -10,6 +10,12 @@ namespace DataAccess
 {
     public class PackagedUnitRepo
     {
+        string serverName = string.Empty;
+
+        public PackagedUnitRepo(string serverName)
+        {
+            this.serverName = serverName;
+        }
 
         /// <summary>
         /// get all packaged units from the db
@@ -23,7 +29,7 @@ namespace DataAccess
                 " MaterialTypes.IconPath AS MaterialIconPath FROM PackagedUnits INNER JOIN Packagings ON PackagedUnits.PackagingId = Packagings.Id INNER JOIN SpecificTypes" +
                 " ON PackagedUnits.SpecificTypeId = SpecificTypes.Id INNER JOIN MaterialTypes ON SpecificTypes.MaterialTypeId = MaterialTypes.Id";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(query, con);
 
@@ -106,7 +112,7 @@ namespace DataAccess
                 "OUTPUT INSERTED.Id " +
                 "VALUES (@ImagePath, @Weight, @StartDate, @PackagingId, @SpecificTypeId, @UserPackingId, @Shipped);";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -148,7 +154,7 @@ namespace DataAccess
 
             string sql = "UPDATE PackagedUnits SET ImagePath=@ImagePath,Weight=@Weight  WHERE Id = @Id";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -194,7 +200,7 @@ namespace DataAccess
 
             string sql = "UPDATE PackagedUnits SET Shipped=@Shipped WHERE Id = @Id";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(sql, con);
 
@@ -240,7 +246,7 @@ namespace DataAccess
 
             int lastId = 0;
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(query, con);
 

@@ -12,6 +12,7 @@
 @using System.Text
 @inject Service myServ
 @inject IBIZ Biz
+@inject IConfiguration Configuration
 @rendermode InteractiveServer
 
 
@@ -66,7 +67,11 @@
     {
 
         var printDoc = new PrintDocument();
-        printDoc.PrinterSettings.PrinterName = "Brother QL-820NWB Printer";
+        printDoc.PrinterSettings.PrinterName = Configuration["printerName"];
+        // printDoc.PrinterSettings.PrinterName = "Brother QL-820NWB Printer";
+
+        
+
         printDoc.PrintPage += (s, e) =>
         {
             Graphics g = e.Graphics;

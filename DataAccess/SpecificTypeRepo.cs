@@ -10,6 +10,14 @@ namespace DataAccess
 {
     public class SpecificTypeRepo
     {
+        string serverName = string.Empty;
+
+        public SpecificTypeRepo(string serverName)
+        {
+            
+            this.serverName = serverName;
+        }
+
 
         public List<SpecificType> GetAll()
         {
@@ -18,7 +26,7 @@ namespace DataAccess
                            " FROM MaterialTypes INNER JOIN SpecificTypes ON MaterialTypes.Id = SpecificTypes.MaterialTypeId";
 
 
-            using (SqlConnection con = new SqlConnection(ConnectionString.ConString))
+            using (SqlConnection con = new SqlConnection(serverName + ConnectionString.ConString))
             {
                 SqlCommand cmd = new SqlCommand(query, con);
 

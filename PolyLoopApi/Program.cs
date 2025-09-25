@@ -1,4 +1,5 @@
 using DataAccess;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<MaterialTypeRepo>();
-builder.Services.AddScoped<PackagedUnitRepo>();
-builder.Services.AddScoped<PackagingRepo>();
-builder.Services.AddScoped<SpecificTypeRepo>();
+builder.Services.AddScoped<MaterialTypeRepo>(sp => new MaterialTypeRepo(builder.Configuration["sqlServer"]));
+builder.Services.AddScoped<PackagedUnitRepo>(sp => new PackagedUnitRepo(builder.Configuration["sqlServer"]));
+builder.Services.AddScoped<PackagingRepo>(sp => new PackagingRepo(builder.Configuration["sqlServer"]));
+builder.Services.AddScoped<SpecificTypeRepo>(sp => new SpecificTypeRepo(builder.Configuration["sqlServer"]));
 
 var app = builder.Build();
 
