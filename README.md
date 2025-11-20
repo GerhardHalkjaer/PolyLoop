@@ -60,7 +60,7 @@ Once recorded, the system prints a label containing a **QR code** with the ID, p
 ### Installation
 
 ```bash
-git clone https://github.com/GerhardHalkjaer/PolyLoop.git
+git clone https://github.com/Jarl-Giga/PolyLoop.git
 cd polyloop
 dotnet restore
 dotnet run
